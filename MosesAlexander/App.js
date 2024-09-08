@@ -1,17 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 import data from './app.json';
-
 export default function App() {
   return (
     <ScrollView style={styles.container}>
-      <Text style = {styles.header}> Data saya dan teman-teman saya</Text>
-      {data.map((data, index) =>
-        <View key={index} style={styles.card}>
-          <Image source={{ uri: data.foto }} style={styles.image} />
-          <Text style={styles.name}>{data.nama}</Text>
-          <Text style={styles.email}>{data.email}</Text>
-        </View>
+      <Text style={styles.header}>Data saya dan teman-teman saya</Text>
+      {data.length > 0 ? (
+        data.map((item, index) => (
+          <View key={index} style={styles.card}>
+            <Image source={{ uri: item.photo_url }} style={styles.image} />
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.email}>{item.email}</Text>
+          </View>
+        ))
+      ) : (
+        <Text style={styles.errorText}>Data tidak tersedia atau gagal dimuat.</Text>
       )}
     </ScrollView>
   );
@@ -27,19 +30,19 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 20,
     marginTop: 10,
   },
 
   card: {
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 20,
     padding: 10,
     marginHorizontal: 20,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
     borderRadius: 10,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
@@ -49,13 +52,13 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: 'bold',
-    textAlign: "center",
+    textAlign: 'center',
   },
 
   email: {
     fontSize: 18,
     fontStyle: 'italic',
-    textAlign: "center",
+    textAlign: 'center',
   },
 
   image: {
@@ -63,5 +66,10 @@ const styles = StyleSheet.create({
     height: 220,
     borderRadius: 10,
     marginTop: 10,
+  },
+
+  errorText: {
+    textAlign: 'center',
+    color: 'red',
   },
 });
