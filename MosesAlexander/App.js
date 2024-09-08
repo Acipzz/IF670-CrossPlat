@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Moses Alexander - 00000069818</Text>
+    <ScrollView style={styles.container}>
+      <Text style = {styles.header}> Data saya dan teman-teman saya</Text>
       <StatusBar style="auto" />
-    </View>
+    </ScrollView>
   );
 }
 
