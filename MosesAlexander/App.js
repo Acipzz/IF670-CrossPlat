@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import data from './app.json';
 
 export default function App() {
   return (
