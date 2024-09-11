@@ -4,6 +4,7 @@ import { Button, View, Text } from "react-native";
 interface ICounter {
     handleIncrement: () => void;
     handleDecrement: () => void;
+    handlePassValue: () => void;
     value: number;
 }
 
@@ -12,6 +13,7 @@ interface ICounter {
 const Counter = ({
     handleDecrement, 
     handleIncrement,
+    handlePassValue,
     value,
 }: ICounter) => {
     return(
@@ -19,6 +21,7 @@ const Counter = ({
             <Text> {value}</Text>
             <Button title = "+" onPress={handleIncrement}/>
             <Button title = "-" onPress={handleDecrement}/>
+            <Button title = "Pass Value" onPress={handlePassValue}/>
         </View>
     );
 };
