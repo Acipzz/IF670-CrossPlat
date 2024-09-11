@@ -1,11 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import  Counter  from "./Counter" ;
+import { useState} from "react";
 
 export default function App() {
+  const [ count, setCount] = useState(0);
+
+  const handleIncrement = () => {
+    setCount(count + 1);
+  };
+
+  const handleDecrement = () => {
+    setCount(count - 1);
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Moses Alexander - 00000069818</Text>
-      <StatusBar style="auto" />
+      <Counter
+        value={count}
+        handleDecrement={handleDecrement}
+        handleIncrement={handleIncrement}
+      />
     </View>
   );
 }
