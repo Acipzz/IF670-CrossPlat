@@ -1,75 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, Image } from 'react-native';
-import data from './app.json';
+import userData from './data.json';
+
+
 export default function App() {
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Data saya dan teman-teman saya</Text>
-      {data.length > 0 ? (
-        data.map((item, index) => (
-          <View key={index} style={styles.card}>
-            <Image source={{ uri: item.photo_url }} style={styles.image} />
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.email}>{item.email}</Text>
+    <ScrollView>
+      {userData.map((users) => {
+        return (
+          <View style={styles.container} key={users.name}>
+            <View style={styles.card}>
+              <Image
+                source={{
+                   uri: users.photo_url, 
+                  }}
+                style={styles.avatar}
+                />
+                <View style={styles.boldText}>
+                  <Text style={styles.boldText}>{users.name}</Text>
+                  <Text>{users.email}</Text>
+                </View>
+            </View>
           </View>
-        ))
-      ) : (
-        <Text style={styles.errorText}>Data tidak tersedia atau gagal dimuat.</Text>
-      )}
+        );
+     })}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
-    paddingVertical: 20,
-  },
-
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-    marginTop: 10,
+    alignItems : "center",
+    justifyContent : "center",	
+    padding : 5,
+    display : "flex",
   },
 
   card: {
-    alignItems: 'center',
-    marginBottom: 20,
-    padding: 10,
-    marginHorizontal: 20,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 8,
+    display : "flex",
+    flexDirection: "row",
+    alignItems : "center",
+    padding : 8,
+    width : 325,
+    gap : 8,
   },
 
-  name: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  avatar: {
+    width: 75,
+    height: 75,
+    borderRadius: 999,
   },
 
-  email: {
-    fontSize: 18,
-    fontStyle: 'italic',
-    textAlign: 'center',
+  boldText: {
+    fontWeight: "bold",
   },
 
-  image: {
-    width: 220,
-    height: 220,
-    borderRadius: 10,
-    marginTop: 10,
+  description: {
+    width: "fit-content",
+    display: "flex",
+    gap: 2,
   },
-
-  errorText: {
-    textAlign: 'center',
-    color: 'red',
-  },
-});
+  });
