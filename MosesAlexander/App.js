@@ -1,68 +1,68 @@
-import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, View, Image, Text } from 'react-native';
+import { Provider as PaperProvider, DefaultTheme, Text as PaperText } from 'react-native-paper';
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';  // Tambahkan ini
 import userData from './data.json';
 import styles from './App.styles.js';
 
+// Fungsi untuk memuat font kustom
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+    'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
+  });
+};
+
+// Tema kustom dengan font yang telah dimuat
+const theme = {
+  ...DefaultTheme,
+  fonts: {
+    ...DefaultTheme.fonts,
+    regular: {
+      fontFamily: 'Roboto-Regular',
+    },
+    medium: {
+      fontFamily: 'Roboto-Bold',
+    },
+  },
+};
 
 export default function App() {
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  if (!fontLoaded) {
+    return (
+      <AppLoading
+        startAsync={fetchFonts} // Mulai memuat font
+        onFinish={() => setFontLoaded(true)} // Set fontLoaded ke true jika selesai
+        onError={(error) => console.warn(error)}
+      />
+    );
+  }
+
   return (
-    <ScrollView>
-      {userData.map((users) => {
-        return (
-          <View style={styles.container} key={users.name}>
-            <View style={styles.card}>
-              <Image
-                source={{
-                   uri: users.photo_url, 
+    <PaperProvider theme={theme}>
+      <ScrollView>
+        {userData.map((users) => {
+          return (
+            <View style={styles.container} key={users.name}>
+              <View style={styles.card}>
+                <Image
+                  source={{
+                    uri: users.photo_url, 
                   }}
-                style={styles.avatar}
+                  style={styles.avatar}
                 />
                 <View style={styles.boldText}>
-                  <Text style={styles.boldText}>{users.name}</Text>
-                  <Text>{users.email}</Text>
+                  <PaperText style={styles.boldText}>{users.name}</PaperText> {/* Gunakan PaperText untuk menggunakan font dari tema */}
+                  <PaperText>{users.email}</PaperText>
                 </View>
+              </View>
             </View>
-          </View>
-        );
-     })}
-    </ScrollView>
+          );
+        })}
+      </ScrollView>
+    </PaperProvider>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     backgroundColor: '#fff',
-//     alignItems : "center",
-//     justifyContent : "center",	
-//     padding : 5,
-//     display : "flex",
-//   },
-
-//   card: {
-//     borderWidth: 1,
-//     borderColor: "black",
-//     borderRadius: 8,
-//     display : "flex",
-//     flexDirection: "row",
-//     alignItems : "center",
-//     padding : 8,
-//     width : 325,
-//     gap : 8,
-//   },
-
-//   avatar: {
-//     width: 75,
-//     height: 75,
-//     borderRadius: 999,
-//   },
-
-//   boldText: {
-//     fontWeight: "bold",
-//   },
-
-//   description: {
-//     width: "fit-content",
-//     display: "flex",
-//     gap: 2,
-//   },
-//   });
