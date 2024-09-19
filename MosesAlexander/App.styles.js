@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 5,
     display: "flex",
+    fontFamily: "Roboto_400Regular",
   },
   card: {
     borderWidth: 1,
@@ -26,11 +27,13 @@ export const styles = StyleSheet.create({
   },
   boldText: {
     fontWeight: "bold",
+    fontFamily: "Roboto_700Bold",
   },
   description: {
-    width: "fit-content",
+    width: "100%",
     display: "flex",
     gap: 2,
+    fontFamily: "Roboto_400Regular",
   },
 });
 
