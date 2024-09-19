@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 5,
     display: "flex",
-    fontFamily: "Roboto_400Regular",
+    fontFamily: "Roboto_300Light_Italic",
   },
   card: {
     borderWidth: 1,
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     width: "100%",
     display: "flex",
     gap: 2,
-    fontFamily: "Roboto_400Regular",
+    fontFamily: "Roboto_300Light_Italic",
   },
 });
 
