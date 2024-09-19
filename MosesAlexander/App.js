@@ -6,40 +6,17 @@ import AppLoading from 'expo-app-loading';  // Tambahkan ini
 import userData from './data.json';
 import styles from './App.styles.js';
 
-// Fungsi untuk memuat font kustom
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
-    'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
-  });
-};
-
-// Tema kustom dengan font yang telah dimuat
-const theme = {
-  ...DefaultTheme,
-  fonts: {
-    ...DefaultTheme.fonts,
-    regular: {
-      fontFamily: 'Roboto-Regular',
-    },
-    medium: {
-      fontFamily: 'Roboto-Bold',
-    },
-  },
-};
-
 export default function App() {
-  const [fontLoaded, setFontLoaded] = useState(false);
+// Memuat font menggunakan hook useFonts dari expo
+let [fontsLoaded] = useFonts({
+  Roboto_400Regular,
+  Roboto_700Bold,
+});
 
-  if (!fontLoaded) {
-    return (
-      <AppLoading
-        startAsync={fetchFonts} // Mulai memuat font
-        onFinish={() => setFontLoaded(true)} // Set fontLoaded ke true jika selesai
-        onError={(error) => console.warn(error)}
-      />
-    );
-  }
+// Jika font belum dimuat, tampilkan AppLoading
+if (!fontsLoaded) {
+  return <AppLoading />;
+}
 
   return (
     <PaperProvider theme={theme}>
@@ -66,3 +43,15 @@ export default function App() {
     </PaperProvider>
   );
 }
+
+const theme = {
+  ...DefaultTheme,
+  fonts: {
+    regular: {
+      fontFamily: 'Roboto_400Regular',
+    },
+    medium: {
+      fontFamily: 'Roboto_700Bold',
+    },
+  },
+};
