@@ -30,8 +30,17 @@ const customDefaultTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    headerColor: 'white',
-    iconColor: 'black',
+    primary: '#000000', // Primary color (for elements like text)
+    background: '#ffffff', // Main background color
+    card: '#ffffff', // Card background color
+    searchBackground: 'lightgray', // Search bar background color
+    text: '#000000', // Text color
+    secondaryText: '#606060', // Secondary text color
+    iconColor: '#000000', // Icon color
+    headerColor: '#ffffff', // Header background color
+    placeholder: '#808080', // Placeholder color
+    border: '#e0e0e0', // Border color
+    borderSearch: '#000000', // Border color for search bar
   },
 };
 
@@ -66,7 +75,7 @@ const RootHome = () => {
 
 export default function App() {
   return (
-    <NavigationContainer theme={customDarkTheme}>
+    <NavigationContainer theme={customDefaultTheme}>
       <Stack.Navigator>
         <Stack.Screen name="rootHome" component={RootHome} options={{ headerShown: false }} />
         <Stack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
