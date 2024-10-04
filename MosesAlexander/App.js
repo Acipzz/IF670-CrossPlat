@@ -1,12 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer'; // Import Drawer
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
 import { MaterialIcons } from '@expo/vector-icons';
 
+// Custom Themes
 const customDarkTheme = {
   ...DarkTheme,
   colors: {
@@ -43,7 +44,9 @@ const customDefaultTheme = {
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
+// RootHome Component
 const RootHome = ({ toggleTheme }) => {
   return (
     <Tabs.Navigator
@@ -65,20 +68,34 @@ const RootHome = ({ toggleTheme }) => {
     >
       <Tabs.Screen 
         name="Home" 
-        component={(props) => <HomeScreen {...props} toggleTheme={toggleTheme} />} 
+        component={HomeScreen} 
         options={{ headerShown: false }} 
+        initialParams={{ toggleTheme }}
       />
       <Tabs.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
     </Tabs.Navigator>
   );
 };
 
+// Drawer Navigator
+const DrawerNavigator = ({ toggleTheme }) => (
+  <Drawer.Navigator>
+    <Drawer.Screen 
+      name="HomeTabs" 
+      component={RootHome} 
+      options={{ headerShown: false }}
+      initialParams={{ toggleTheme }}
+    />
+    <Drawer.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
+  </Drawer.Navigator>
+);
+
 export default function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     setIsDarkTheme((prevTheme) => !prevTheme);
-  };
+  }, []);
 
   const currentTheme = isDarkTheme ? customDarkTheme : customDefaultTheme;
 
@@ -86,13 +103,12 @@ export default function App() {
     <NavigationContainer theme={currentTheme}>
       <Stack.Navigator>
         <Stack.Screen 
-          name="rootHome" 
-          component={(props) => <RootHome {...props} toggleTheme={toggleTheme} />} 
-          options={{ headerShown: false }} 
+          name="DrawerRoot" 
+          component={DrawerNavigator} 
+          options={{ headerShown: false }}
+          initialParams={{ toggleTheme }} 
         />
-        <Stack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
-      <StatusBar style="auto" />
     </NavigationContainer>
   );
 }

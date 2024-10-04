@@ -4,22 +4,28 @@ import { Entypo, Feather } from '@expo/vector-icons';
 import { useNavigation, useTheme } from '@react-navigation/native'; // Import useNavigation
 import Constant from 'expo-constants';
 
-export default function Header({toggleTheme}) {
-    const navigation = useNavigation(); // Mengambil instance navigation
-    const { colors } = useTheme(); // Mengambil warna tema
-    const mycolor = colors.iconColor; // Mengambil warna ikon
+export default function Header({ toggleTheme }) {
+    const navigation = useNavigation(); // Get navigation instance
+    const { colors } = useTheme(); // Access theme colors
+    const mycolor = colors.iconColor; // Icon color from theme
+
     return (
         <View style={[styles.headerContainer, { backgroundColor: colors.headerColor }]}>
             <View style={styles.headerContent}>
+                {/* Drawer toggle icon */}
+                <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                    <Feather name="menu" size={28} color={mycolor} style={styles.iconStyle} />
+                </TouchableOpacity>
                 <Entypo name="youtube" size={28} color="red" style={styles.iconStyle} />
-                <Text style={[styles.textStyle, {color: mycolor}]}>Youtube</Text>
+                <Text style={[styles.textStyle, { color: mycolor }]}>Youtube</Text>
             </View>
             <View style={styles.headerContent2}>
                 <Feather name="cast" size={28} color={mycolor} style={styles.iconStyle} />
                 <TouchableOpacity onPress={() => navigation.navigate("Search")}>
                     <Feather name="search" size={28} color={mycolor} style={styles.iconStyle} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => toggleTheme()}>
+                {/* Trigger toggleTheme when user icon is clicked */}
+                <TouchableOpacity onPress={toggleTheme}>
                     <Feather name="user" size={28} color={mycolor} style={styles.iconStyle} />
                 </TouchableOpacity>
             </View>
@@ -35,21 +41,21 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 8,
         elevation: 5,
-        justifyContent: "space-between", // Ensure content is spaced
-        flexDirection: 'row', // Align icons on one line
-        paddingHorizontal: 10, // Add padding to sides
+        justifyContent: "space-between",
+        flexDirection: 'row',
+        paddingHorizontal: 10,
         marginTop: Constant.statusBarHeight,
     },
     headerContent: {
         flexDirection: "row",
-        alignItems: "center", // Align icon and text vertically
+        alignItems: "center",
     },
     headerContent2: {
-        flexDirection: "row", // Display the icons in a row
-        alignItems: "center", // Align the icons vertically
+        flexDirection: "row",
+        alignItems: "center",
     },
     iconStyle: {
-        marginHorizontal: 10, // Horizontal margin between icons
+        marginHorizontal: 10,
     },
     textStyle: {
         fontSize: 22,
