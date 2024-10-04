@@ -1,9 +1,12 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { useTheme } from '@react-navigation/native'; // Import useTheme
 import Header from "./Header"; // Adjust the path as necessary
 import Card from "./Card"; // Adjust the path as necessary
 
 const HomeScreen = () => {
+    const { colors } = useTheme(); // Access theme colors
+
     const cardsData = [
         {
             imageUri: 'https://images.unsplash.com/photo-1557683316-973673baf926',
@@ -24,7 +27,7 @@ const HomeScreen = () => {
     ];
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
             <Header />
             <ScrollView>
                 {cardsData.map((card, index) => (
@@ -43,7 +46,6 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
     },
 });
 

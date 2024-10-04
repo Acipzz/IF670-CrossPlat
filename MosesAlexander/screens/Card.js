@@ -1,10 +1,13 @@
 import React from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
+import { useTheme } from '@react-navigation/native'; // Import useTheme
 
 const Card = ({ imageUri, title, publisher }) => {
+    const { colors } = useTheme(); // Mengambil warna tema
+
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: colors.cardBackground }]}>
             <Image
                 source={{ uri: imageUri }}
                 style={styles.image}
@@ -12,10 +15,10 @@ const Card = ({ imageUri, title, publisher }) => {
                 onLoad={() => console.log('Image Loaded Successfully')}
             />
             <View style={styles.infoContainer}>
-                <FontAwesome name="user-circle" size={40} color="black" style={styles.icon} />
+                <FontAwesome name="user-circle" size={40} color={colors.iconColor} style={styles.icon} />
                 <View style={styles.textContainer}>
-                    <Text style={styles.title}>{title}</Text>
-                    <Text style={styles.publisher}>{publisher}</Text>
+                    <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+                    <Text style={[styles.publisher, { color: colors.secondaryText }]}>{publisher}</Text>
                 </View>
             </View>
         </View>
@@ -25,10 +28,8 @@ const Card = ({ imageUri, title, publisher }) => {
 const styles = StyleSheet.create({
     card: {
         width: '100%',
-        padding: 20,
+        paddingBottom: 20,
         marginVertical: 10,
-        backgroundColor: '#f8f8f8',
-        borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -39,17 +40,18 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: 200,
-        borderRadius: 10,
     },
     infoContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
         marginTop: 10,
+        marginLeft: 20,
         width: '100%',
     },
     icon: {
-        marginRight: 10,
+        marginRight:10,
+
     },
     textContainer: {
         flex: 1,
@@ -60,7 +62,6 @@ const styles = StyleSheet.create({
     },
     publisher: {
         fontSize: 14,
-        color: 'gray',
     },
 });
 

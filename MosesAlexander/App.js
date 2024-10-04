@@ -1,14 +1,78 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './screens/HomeScreen';
+import SearchScreen from './screens/SearchScreen';
+import { MaterialIcons } from '@expo/vector-icons';
 
+const customDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    primary: '#ffffff', // Primary color (for elements like text)
+    background: '#121212', // Main background color
+    cardBackground: '#121212', // Card background color
+    searchBackground: 'gray', // Search bar background color
+    text: '#ffffff', // Text color
+    secondaryText: '#b0b0b0', // Secondary text color
+    iconColor: '#ffffff', // Icon color
+    headerColor: '#121212', // Header background color
+    placeholder: '#ffffff', // Placeholder color
+    border: '#121212', // Border color
+    borderSearch: '#ffffff', // Border color for search bar
+    // text: '#ffffff', // Text Color
+    // secondaryText: '#b0b0b0', // Secondary text color
+},
+};
+
+const customDefaultTheme = { 
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    headerColor: 'white',
+    iconColor: 'black',
+  },
+};
+
+const Stack = createStackNavigator();
+const Tabs = createBottomTabNavigator();
+
+const RootHome = () => {
+  return (
+    <Tabs.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({color}) => {
+        let iconName;
+
+        if (route.name === 'Home') {
+          iconName = 'home'
+        } else if (route.name === 'Search') {
+          iconName = 'search'
+        }
+
+        // You can return any component that you like here!
+        return <MaterialIcons name={iconName} size={32} color={color} />;
+      },
+      tabBarActiveTintColor: 'red',
+      tabBarInactiveTintColor: 'gray',
+    })}
+    >
+      <Tabs.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+      <Tabs.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
+    </Tabs.Navigator>
+  );
+};
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <HomeScreen />
+    <NavigationContainer theme={customDarkTheme}>
+      <Stack.Navigator>
+        <Stack.Screen name="rootHome" component={RootHome} options={{ headerShown: false }} />
+        <Stack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
+      </Stack.Navigator>
       <StatusBar style="auto" />
-    </View>
+    </NavigationContainer>
   );
 }
 

@@ -1,60 +1,42 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+import React from "react";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Entypo, Feather } from '@expo/vector-icons';
+import { useNavigation, useTheme } from '@react-navigation/native'; // Import useNavigation
 import Constant from 'expo-constants';
 
 export default function Header() {
-    const [isSearchVisible, setIsSearchVisible] = useState(false);
-
-    const toggleSearch = () => {
-        setIsSearchVisible(!isSearchVisible);
-    };
-
-    const hideSearch = () => {
-        setIsSearchVisible(false);
-    };
-
+    const navigation = useNavigation(); // Mengambil instance navigation
+    const { colors } = useTheme(); // Mengambil warna tema
+    const mycolor = colors.iconColor; // Mengambil warna ikon
     return (
-        <View style={styles.headerContainer}>
-            {isSearchVisible ? (
-                <View style={styles.searchContainer}>
-                    <TouchableOpacity onPress={hideSearch} style={styles.backButton}>
-                        <Feather name="arrow-left" size={24} color="black" />
-                    </TouchableOpacity>
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Search..."
-                        autoFocus={true}
-                    />
-                </View>
-            ) : (
-                <>
-                    <View style={styles.headerContent}>
-                        <Entypo name="youtube" size={28} color="red" style={styles.iconStyle} />
-                        <Text style={styles.textStyle}>Youtube</Text>
-                    </View>
-                    <View style={styles.headerContent2}>
-                        <Feather name="cast" size={28} color="black" style={styles.iconStyle} />
-                        <TouchableOpacity onPress={toggleSearch}>
-                            <Feather name="search" size={28} color="black" style={styles.iconStyle} />
-                        </TouchableOpacity>
-                        <Feather name="user" size={28} color="black" style={styles.iconStyle} />
-                    </View>
-                </>
-            )}
+        <View style={[styles.headerContainer, { backgroundColor: colors.headerColor }]}>
+            <View style={styles.headerContent}>
+                <Entypo name="youtube" size={28} color="red" style={styles.iconStyle} />
+                <Text style={[styles.textStyle, {color: mycolor}]}>Youtube</Text>
+            </View>
+            <View style={styles.headerContent2}>
+                <Feather name="cast" size={28} color={mycolor} style={styles.iconStyle} />
+                <TouchableOpacity onPress={() => navigation.navigate("Search")}>
+                    <Feather name="search" size={28} color={mycolor} style={styles.iconStyle} />
+                </TouchableOpacity>
+                <Feather name="user" size={28} color={mycolor} style={styles.iconStyle} />
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     headerContainer: {
-        marginTop: Constant.statusBarHeight,
-        height: 45,
-        backgroundColor: "white",
+        height: 55,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        elevation: 5,
         justifyContent: "space-between", // Ensure content is spaced
         flexDirection: 'row', // Align icons on one line
         paddingHorizontal: 10, // Add padding to sides
-        elevation: 5,
+        marginTop: Constant.statusBarHeight,
     },
     headerContent: {
         flexDirection: "row",
@@ -71,21 +53,5 @@ const styles = StyleSheet.create({
         fontSize: 22,
         marginLeft: 5,
         fontWeight: "bold",
-        color: "black",
-    },
-    searchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
-    },
-    backButton: {
-        padding: 10,
-    },
-    searchInput: {
-        flex: 1,
-        padding: 10,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 5,
     },
 });
