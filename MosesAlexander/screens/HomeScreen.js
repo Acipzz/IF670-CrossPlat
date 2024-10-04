@@ -4,7 +4,7 @@ import { useTheme } from '@react-navigation/native'; // Import useTheme
 import Header from "./Header"; // Adjust the path as necessary
 import Card from "./Card"; // Adjust the path as necessary
 
-const HomeScreen = () => {
+const HomeScreen = ({toggleTheme}) => {
     const { colors } = useTheme(); // Access theme colors
 
     const cardsData = [
@@ -28,7 +28,7 @@ const HomeScreen = () => {
 
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
-            <Header />
+            <Header toggleTheme={toggleTheme} />
             <ScrollView>
                 {cardsData.map((card, index) => (
                     <Card

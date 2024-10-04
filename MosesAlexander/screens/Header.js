@@ -4,7 +4,7 @@ import { Entypo, Feather } from '@expo/vector-icons';
 import { useNavigation, useTheme } from '@react-navigation/native'; // Import useNavigation
 import Constant from 'expo-constants';
 
-export default function Header() {
+export default function Header({toggleTheme}) {
     const navigation = useNavigation(); // Mengambil instance navigation
     const { colors } = useTheme(); // Mengambil warna tema
     const mycolor = colors.iconColor; // Mengambil warna ikon
@@ -19,7 +19,9 @@ export default function Header() {
                 <TouchableOpacity onPress={() => navigation.navigate("Search")}>
                     <Feather name="search" size={28} color={mycolor} style={styles.iconStyle} />
                 </TouchableOpacity>
-                <Feather name="user" size={28} color={mycolor} style={styles.iconStyle} />
+                <TouchableOpacity onPress={() => toggleTheme()}>
+                    <Feather name="user" size={28} color={mycolor} style={styles.iconStyle} />
+                </TouchableOpacity>
             </View>
         </View>
     );
