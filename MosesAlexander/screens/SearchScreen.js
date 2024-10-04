@@ -4,6 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { useNavigation, useTheme } from '@react-navigation/native'; // Import useNavigation and useTheme
 import Constant from 'expo-constants';
 import MiniCard from './MiniCard'; // Ensure this import is correct
+import { ScrollView } from "react-native-gesture-handler";
 
 const SearchScreen = () => {
   const navigation = useNavigation(); // Get navigation instance
@@ -26,6 +27,36 @@ const SearchScreen = () => {
         title: 'Mountain Adventure',
         publisher: 'Hiker'
     },
+    {
+      imageUri: 'https://images.unsplash.com/photo-1557683316-973673baf926',
+      title: 'Beautiful Landscape',
+      publisher: 'Nature Lover'
+  },
+  {
+      imageUri: 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
+      title: 'City at Night',
+      publisher: 'Urban Explorer'
+  },
+  {
+      imageUri: 'https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6',
+      title: 'Mountain Adventure',
+      publisher: 'Hiker'
+  },
+  {
+    imageUri: 'https://images.unsplash.com/photo-1557683316-973673baf926',
+    title: 'Beautiful Landscape',
+    publisher: 'Nature Lover'
+},
+{
+    imageUri: 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
+    title: 'City at Night',
+    publisher: 'Urban Explorer'
+},
+{
+    imageUri: 'https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6',
+    title: 'Mountain Adventure',
+    publisher: 'Hiker'
+},
     // Add more card data as needed
   ];
 
@@ -45,7 +76,7 @@ const SearchScreen = () => {
           <Feather name='send' size={24} color={colors.iconColor} style={styles.icon} />
         </TouchableOpacity>
       </View>
-      <View>
+      <ScrollView>
         {minicardsData.map((card, index) => (
           <MiniCard
             key={index}
@@ -54,7 +85,7 @@ const SearchScreen = () => {
             publisher={card.publisher}
           />
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 };

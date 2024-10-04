@@ -1,18 +1,17 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Entypo, Feather } from '@expo/vector-icons';
-import { useNavigation, useTheme } from '@react-navigation/native'; // Import useNavigation
+import { useNavigation, useTheme } from '@react-navigation/native'; 
 import Constant from 'expo-constants';
 
 export default function Header({ toggleTheme }) {
-    const navigation = useNavigation(); // Get navigation instance
-    const { colors } = useTheme(); // Access theme colors
-    const mycolor = colors.iconColor; // Icon color from theme
+    const navigation = useNavigation(); 
+    const { colors } = useTheme(); 
+    const mycolor = colors.iconColor; 
 
     return (
         <View style={[styles.headerContainer, { backgroundColor: colors.headerColor }]}>
             <View style={styles.headerContent}>
-                {/* Drawer toggle icon */}
                 <TouchableOpacity onPress={() => navigation.openDrawer()}>
                     <Feather name="menu" size={28} color={mycolor} style={styles.iconStyle} />
                 </TouchableOpacity>
@@ -24,7 +23,6 @@ export default function Header({ toggleTheme }) {
                 <TouchableOpacity onPress={() => navigation.navigate("Search")}>
                     <Feather name="search" size={28} color={mycolor} style={styles.iconStyle} />
                 </TouchableOpacity>
-                {/* Trigger toggleTheme when user icon is clicked */}
                 <TouchableOpacity onPress={toggleTheme}>
                     <Feather name="user" size={28} color={mycolor} style={styles.iconStyle} />
                 </TouchableOpacity>

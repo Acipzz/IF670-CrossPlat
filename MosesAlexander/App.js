@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator } from '@react-navigation/drawer'; // Import Drawer
+import { createDrawerNavigator } from '@react-navigation/drawer'; 
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -70,7 +70,6 @@ const RootHome = ({ toggleTheme }) => {
         name="Home" 
         component={HomeScreen} 
         options={{ headerShown: false }} 
-        initialParams={{ toggleTheme }}
       />
       <Tabs.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
     </Tabs.Navigator>
@@ -81,10 +80,9 @@ const RootHome = ({ toggleTheme }) => {
 const DrawerNavigator = ({ toggleTheme }) => (
   <Drawer.Navigator>
     <Drawer.Screen 
-      name="HomeTabs" 
+      name="Home" 
       component={RootHome} 
       options={{ headerShown: false }}
-      initialParams={{ toggleTheme }}
     />
     <Drawer.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
   </Drawer.Navigator>
@@ -94,7 +92,7 @@ export default function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   const toggleTheme = useCallback(() => {
-    setIsDarkTheme((prevTheme) => !prevTheme);
+    setIsDarkTheme(prevTheme => !prevTheme);
   }, []);
 
   const currentTheme = isDarkTheme ? customDarkTheme : customDefaultTheme;
@@ -106,7 +104,6 @@ export default function App() {
           name="DrawerRoot" 
           component={DrawerNavigator} 
           options={{ headerShown: false }}
-          initialParams={{ toggleTheme }} 
         />
       </Stack.Navigator>
     </NavigationContainer>
