@@ -1,51 +1,60 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { useTheme } from '@react-navigation/native'; // Import useTheme
+import { Feather, FontAwesome6 } from "@expo/vector-icons";
 
 const MiniCard = ({ imageUri, title, publisher }) => {
     const { colors } = useTheme(); // Access theme colors
 
     return (
         <View style={[styles.container, { backgroundColor: colors.card }]}>
+            {/* Icon on the left */}
+            <FontAwesome6 name="clock-rotate-left" size={24} color={colors.iconColor} style={styles.icon} />
+
+            {/* Text on the left */}
+            <View style={styles.textContainer}>
+                <Text style={[styles.title, { color: colors.text }]} numberOfLines={1}>
+                    {title}
+                </Text>
+            </View>
+
+            {/* Thumbnail image on the right */}
             <Image
                 source={{ uri: imageUri }}
                 style={styles.image}
                 onError={(error) => console.log('Image Load Error:', error.nativeEvent.error)}
                 onLoad={() => console.log('Image Loaded Successfully')}
             />
-            <View style={styles.textContainer}>
-                <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
-                <Text style={[styles.publisher, { color: colors.secondaryText }]}>{publisher}</Text>
-            </View>
+            <Feather name="arrow-up-left" size={24} color={colors.iconColor} style={styles.icon2}/>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        padding: 10, // Reducing padding for better layout
-        marginVertical: 10,
-        borderRadius: 10,
-        flexDirection: 'row', // Set flex direction to row
-        alignItems: 'center', // Center items vertically
+        flexDirection: 'row', // Align items in a row (text and image)
+        alignItems: 'center', // Align items vertically
+        paddingVertical: 10, // Space around the card
+        paddingHorizontal: 15, 
     },
-    image: {
-        width: 80, // Fixed image size
-        height: 80,
-        borderRadius: 10,
-        marginRight: 10, // Adding space between image and text
+    icon: {
+        marginRight: 20, // Add space between icon and text
+    },
+    icon2: {
+        marginLeft: 20, // Add space between icon and image
     },
     textContainer: {
         flex: 1, // Let text take remaining space
+        justifyContent: 'center',
+        marginLeft: 10,
     },
     title: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
-        marginBottom: 4, // Add bottom space between title and publisher
     },
-    publisher: {
-        fontSize: 14,
+    image: {
+        width: 60, 
+        height: 40, 
     },
 });
 

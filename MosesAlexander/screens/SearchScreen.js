@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialIcons} from '@expo/vector-icons';
 import { useNavigation, useTheme } from '@react-navigation/native'; // Import useNavigation and useTheme
 import Constant from 'expo-constants';
 import MiniCard from './MiniCard'; // Ensure this import is correct
@@ -73,7 +73,7 @@ const SearchScreen = () => {
           onChangeText={(text) => setValue(text)} 
         />
         <TouchableOpacity onPress={() => {/* Add send action here */}}>
-          <Feather name='send' size={24} color={colors.iconColor} style={styles.icon} />
+          <MaterialIcons name='mic' size={28} color={colors.iconColor} style={styles.icon} />
         </TouchableOpacity>
       </View>
       <ScrollView>

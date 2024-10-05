@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { Entypo, Feather } from '@expo/vector-icons';
+import { Entypo, Feather, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, useTheme } from '@react-navigation/native'; 
 import Constant from 'expo-constants';
 
@@ -20,12 +20,11 @@ export default function Header({ toggleTheme }) {
             </View>
             <View style={styles.headerContent2}>
                 <Feather name="cast" size={28} color={mycolor} style={styles.iconStyle} />
+                <MaterialIcons name="notifications-none" size={28} color={mycolor} style={styles.iconStyle} />
                 <TouchableOpacity onPress={() => navigation.navigate("Search")}>
                     <Feather name="search" size={28} color={mycolor} style={styles.iconStyle} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={toggleTheme}>
-                    <Feather name="user" size={28} color={mycolor} style={styles.iconStyle} />
-                </TouchableOpacity>
+                
             </View>
         </View>
     );
