@@ -5,7 +5,7 @@ import { useNavigation, useTheme } from '@react-navigation/native';
 import Constant from 'expo-constants';
 
 // Dummy categories data
-const categories = ["All", "Gaming", "Sports", "Music", "Movies"];
+const categories = ["All", "Gaming", "Sports", "Music", "Movies", "Comedy", "News", "Entertainment"];
 
 export default function Header({ toggleTheme }) {
     const navigation = useNavigation(); 
@@ -16,9 +16,9 @@ export default function Header({ toggleTheme }) {
     const renderCategories = () => (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesScroll}>
             {categories.map((category, index) => (
-                <TouchableOpacity key={index} style={styles.categoryButton}>
+                <View key={index} style={styles.categoryButton}>
                     <Text style={styles.categoryText}>{category}</Text>
-                </TouchableOpacity>
+                </View>
             ))}
         </ScrollView>
     );
@@ -52,14 +52,8 @@ export default function Header({ toggleTheme }) {
 const styles = StyleSheet.create({
     headerContainer: {
         height: 55,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 5,
         justifyContent: "space-between",
         flexDirection: 'row',
-        paddingHorizontal: 10,
         marginTop: Constant.statusBarHeight,
     },
     headerContent: {
@@ -87,7 +81,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 10,
         backgroundColor: '#444',
-        borderRadius: 20,
+        borderRadius: 10,
         marginRight: 10,
         alignItems: 'center', // Horizontally center text
         justifyContent: 'center', // Vertically center text
