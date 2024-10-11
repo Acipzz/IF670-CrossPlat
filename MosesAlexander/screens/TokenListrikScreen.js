@@ -1,59 +1,96 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const TokenListrikScreen = () => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [activeTab, setActiveTab] = useState('Pulsa'); // Pulsa or Paket Data
+  const [customerId, setCustomerId] = useState('');
+  const [errorMessage, setErrorMessage] = useState('ID pelanggan tidak valid.'); // Pesan error default
+
+  const navigation = useNavigation(); // Gunakan useNavigation untuk navigasi
+
+  // Data pilihan token listrik
+  const tokenOptions = [
+    { value: '20.000', price: 21500 },
+    { value: '50.000', price: 51500 },
+    { value: '100.000', price: 101500 },
+    { value: '200.000', price: 201500 },
+    { value: '500.000', price: 501500 },
+  ];
+
+  // Fungsi untuk memvalidasi ID pelanggan
+  const handleCustomerIdChange = (input) => {
+    setCustomerId(input);
+    const validationError = validateCustomerId(input);
+    setErrorMessage(validationError); // Set pesan error jika ada
+  };
+
+  // Fungsi untuk navigasi ke halaman konfirmasi
+  const handleOptionPress = (tokenData) => {
+    navigation.navigate('PaymentToken', { tokenData, customerId });
+  };
+
+  // Fungsi untuk merender kartu token listrik
+  const renderOption = ({ item }) => (
+    <TouchableOpacity style={styles.optionCard} onPress={() => handleOptionPress(item)}>
+      <Text style={styles.optionValue}>{item.value}</Text>
+      <Text style={styles.optionPrice}>Harga Rp {item.price.toLocaleString()}</Text>
+    </TouchableOpacity>
+  );
+
+  // Tampilkan komponen jika nomor valid
+  const isValidCustomerId = errorMessage === "";
 
   return (
     <View style={styles.container}>
       {/* Header */}
-      <Text style={styles.header}>Pulsa & Paket Data</Text>
+      <Text style={styles.header}>Token Listrik</Text>
 
-      {/* Input Nomor Ponsel */}
+      {/* Input ID Pelanggan */}
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.input}
-          placeholder="Contoh : 082370323318"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
+          style={[styles.input, errorMessage && { borderColor: 'red' }]} // Warnai merah jika error
+          placeholder="Contoh : 232111074358"
+          value={customerId}
+          onChangeText={handleCustomerIdChange}
+          keyboardType="numeric"
         />
-        <TouchableOpacity style={styles.iconButton}>
-          {/* Icon bisa ditambahkan di sini */}
-          <Text>📱</Text>
-        </TouchableOpacity>
       </View>
 
-      {/* Tab Selector: Isi Pulsa & Paket Data */}
-      <View style={styles.tabContainer}>
-        <TouchableOpacity
-          style={[styles.tabButton, activeTab === 'Pulsa' && styles.activeTab]}
-          onPress={() => setActiveTab('Pulsa')}
-        >
-          <Text style={activeTab === 'Pulsa' ? styles.activeTabText : styles.tabText}>
-            Isi Pulsa
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tabButton, activeTab === 'Paket Data' && styles.activeTab]}
-          onPress={() => setActiveTab('Paket Data')}
-        >
-          <Text style={activeTab === 'Paket Data' ? styles.activeTabText : styles.tabText}>
-            Paket Data
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {/* Tampilkan Pesan Error Jika Ada */}
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
 
-      {/* Pesan Peringatan */}
-      <View style={styles.warningContainer}>
-        <Text style={styles.warningText}>
-          Isi ID Pelanggan yang valid untuk menampilkan menu pembelian.
-        </Text>
-      </View>
+      {/* Render pilihan token listrik hanya jika ID pelanggan valid */}
+      {isValidCustomerId && (
+        <FlatList
+          data={tokenOptions}
+          renderItem={renderOption}
+          keyExtractor={(item) => item.value}
+          numColumns={2} // Menampilkan dalam dua kolom
+          contentContainerStyle={styles.grid}
+        />
+      )}
     </View>
   );
 };
 
+// Fungsi Validasi
+const validateCustomerId = (customerId) => {
+  // Harus diawali dengan angka selain nol
+  if (customerId.length > 0 && customerId[0] === '0') {
+    return "ID pelanggan tidak boleh diawali dengan angka 0.";
+  }
+  
+  // Jumlah digit harus maksimal 12
+  if (customerId.length > 12) {
+    return "ID pelanggan maksimal 12 digit.";
+  }
+
+  return ""; // Tidak ada error
+};
+
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -67,12 +104,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 20,
   },
   input: {
-    flex: 1,
     height: 50,
     borderColor: '#dcdcdc',
     borderWidth: 1,
@@ -80,47 +114,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#f9f9f9',
   },
-  iconButton: {
-    marginLeft: 10,
-    padding: 10,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: 'center',
+  grid: {
     paddingVertical: 10,
+  },
+  optionCard: {
+    flex: 1,
+    margin: 10,
+    padding: 15,
     backgroundColor: '#f0f0f0',
-    marginHorizontal: 5,
     borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  activeTab: {
-    backgroundColor: '#007bff',
-  },
-  tabText: {
-    color: '#555',
-    fontSize: 16,
-  },
-  activeTabText: {
-    color: '#fff',
-    fontSize: 16,
+  optionValue: {
+    fontSize: 18,
     fontWeight: 'bold',
   },
-  warningContainer: {
-    backgroundColor: '#f0f0f0',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  warningText: {
-    color: '#333',
-    textAlign: 'center',
+  optionPrice: {
     fontSize: 14,
+    color: '#555',
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    marginBottom: 10,
   },
 });
 

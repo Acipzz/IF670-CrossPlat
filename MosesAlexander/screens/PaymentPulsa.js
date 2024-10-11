@@ -1,0 +1,155 @@
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+
+// Import valid prefixes from PulsaDataScreen
+const validPrefixes = {
+  Telkomsel: ['0811', '0812', '0813', '0821', '0822', '0823'],
+  Indosat: ['0852', '0853', '0814', '0815', '0816'],
+  XL: ['0851', '0855', '0856', '0857', '0858'],
+  Tri: ['0895', '0896', '0897', '0898', '0899'],
+  Smartfren: ['0881', '0882', '0883', '0884', '0885', '0886', '0887', '0888', '0889'],
+};
+
+// Helper function to determine the operator based on the phone number prefix
+const getOperatorLabel = (phoneNumber) => {
+  const prefix = phoneNumber.slice(0, 4); // Get the first 4 digits
+
+  for (const [operator, prefixes] of Object.entries(validPrefixes)) {
+    if (prefixes.includes(prefix)) {
+      return operator;
+    }
+  }
+  
+  return 'Unknown Operator'; // Default if no match found
+};
+
+const PaymentPulsa = ({ route, navigation }) => {
+  const { packageData, phoneNumber } = route.params; // Terima data dari navigasi
+
+  // Determine the package label dynamically
+  const packageLabel = getOperatorLabel(phoneNumber);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Konfirmasi Pembayaran</Text>
+
+      {/* Informasi Paket yang Dipilih */}
+      <View style={styles.packageInfo}>
+        <Text style={styles.packageLabel}>{packageLabel}</Text> {/* Dynamic operator name */}
+        <Text style={styles.phoneNumber}>{phoneNumber}</Text>
+        <Text style={styles.packagePrice}>Rp {packageData.price.toLocaleString()}</Text>
+      </View>
+
+      {/* Metode Pembayaran */}
+      <View style={styles.paymentMethod}>
+        <Text style={styles.methodTitle}>Metode Pembayaran</Text>
+        <View style={styles.balanceContainer}>
+          <Text>Saldo saya</Text>
+          <Text>Rp 900.000</Text>
+        </View>
+        <Text>Rp {packageData.price.toLocaleString()}</Text>
+      </View>
+
+      {/* Detail Pembayaran */}
+      <View style={styles.paymentDetails}>
+        <Text style={styles.detailsTitle}>Detail Pembayaran</Text>
+        <View style={styles.detailRow}>
+          <Text>Harga Voucher</Text>
+          <Text>Rp {packageData.price.toLocaleString()}</Text>
+        </View>
+        <View style={styles.detailRow}>
+          <Text>Biaya Transaksi</Text>
+          <Text>Rp 0</Text>
+        </View>
+        <View style={styles.totalRow}>
+          <Text>Total Pembayaran</Text>
+          <Text>Rp {packageData.price.toLocaleString()}</Text>
+        </View>
+      </View>
+
+      {/* Tombol Konfirmasi */}
+      <TouchableOpacity style={styles.confirmButton} onPress={() => alert('Pembayaran Berhasil!')}>
+        <Text style={styles.confirmButtonText}>Konfirmasi</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 20,
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  packageInfo: {
+    backgroundColor: '#f0f0f0',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  packageLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  phoneNumber: {
+    fontSize: 16,
+    marginVertical: 10,
+  },
+  packagePrice: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#007bff',
+  },
+  paymentMethod: {
+    marginBottom: 20,
+  },
+  methodTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  balanceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  paymentDetails: {
+    marginBottom: 20,
+  },
+  detailsTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  totalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    fontWeight: 'bold',
+  },
+  confirmButton: {
+    backgroundColor: '#007bff',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  confirmButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
+
+export default PaymentPulsa;
