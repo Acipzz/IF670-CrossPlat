@@ -1,72 +1,63 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { TransactionContext } from './TransactionContext';
 
-const BPJSScreen = () => {
-  const [bpjsNumber, setBpjsNumber] = useState('');
+const BpjsScreen = () => {
+  const { transactionData, updateTransactionData } = useContext(TransactionContext); // Gunakan context
   const [errorMessage, setErrorMessage] = useState('Nomor BPJS tidak valid.'); // Pesan error default
 
   const navigation = useNavigation(); // Gunakan useNavigation untuk navigasi
 
-  // Data pilihan nominal BPJS
-  const bpjsOptions = [
-    { value: '1 Bulan - Rp 50.000', price: 50000 },
-    { value: '2 Bulan - Rp 100.000', price: 100000 },
-    { value: '3 Bulan - Rp 150.000', price: 150000 },
-    { value: '4 Bulan - Rp 200.000', price: 200000 },
-    { value: '5 Bulan - Rp 250.000', price: 250000 },
-    { value: '6 Bulan - Rp 300.000', price: 300000 },
-    // Tambahkan lebih banyak bulan sesuai kebutuhan
-  ];
+  // Data pilihan nominal BPJS (kelipatan Rp50.000)
+  const bpjsOptions = Array.from({ length: 12 }, (_, i) => ({
+    price: (i + 1 ) * 50000, // Harga dalam rupiah
+    value: i + 1 + " Bulan" // Menunjukkan bulan untuk pembayaran
+  }));
 
   // Fungsi untuk memvalidasi nomor BPJS
-  const handleBpjsNumberChange = (input) => {
-    setBpjsNumber(input);
-    const validationError = validateBpjsNumber(input);
-    setErrorMessage(validationError); // Set pesan error jika ada
+  const handleBpjsIdChange = (input) => {
+    updateTransactionData('bpjsId', input);
+    const validationError = validateBpjsId(input);
+    setErrorMessage(validationError);
   };
 
-  // Fungsi untuk navigasi ke halaman konfirmasi
-  const handleOptionPress = (bpjsData) => {
-    navigation.navigate('PaymentBPJS', { bpjsData, bpjsNumber });
-  };
-
-  // Fungsi untuk merender kartu BPJS
   const renderOption = ({ item }) => (
-    <TouchableOpacity style={styles.optionCard} onPress={() => handleOptionPress(item)}>
+    <TouchableOpacity 
+      style={styles.optionCard} 
+      onPress={() => handleOptionPress(item)}
+    >
       <Text style={styles.optionValue}>{item.value}</Text>
       <Text style={styles.optionPrice}>Harga Rp {item.price.toLocaleString()}</Text>
     </TouchableOpacity>
   );
 
-  // Tampilkan komponen jika nomor valid
-  const isValidBpjsNumber = errorMessage === "";
+  const handleOptionPress = (nominalData) => {
+    updateTransactionData('packageData', nominalData); // Simpan nominal yang dipilih di context
+    navigation.navigate('PaymentBPJS'); // Navigasi ke halaman pembayaran BPJS
+  };
+
+  const isValidBpjsId = errorMessage === "";
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <Text style={styles.header}>Pembayaran BPJS</Text>
 
-      {/* Input Nomor BPJS */}
       <View style={styles.inputContainer}>
         <TextInput
           style={[styles.input, errorMessage && { borderColor: 'red' }]} // Warnai merah jika error
           placeholder="Contoh: 0123456789012"
-          value={bpjsNumber}
-          onChangeText={handleBpjsNumberChange}
+          value={transactionData.bpjsId}
+          onChangeText={handleBpjsIdChange}
           keyboardType="numeric"
         />
       </View>
 
-      {/* Tampilkan Pesan Error Jika Ada */}
-      {errorMessage ? (
-        <Text style={styles.errorText}>{errorMessage}</Text>
-      ) : null}
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
-      {/* Render pilihan nominal hanya jika ID BPJS valid */}
-      {isValidBpjsNumber && (
+      {isValidBpjsId && (
         <FlatList
-          data={bpjsOptions}
+          data={bpjsOptions} // Gunakan bpjsOptions yang baru
           renderItem={renderOption}
           keyExtractor={(item) => item.value}
           numColumns={2} // Menampilkan dalam dua kolom
@@ -78,17 +69,14 @@ const BPJSScreen = () => {
 };
 
 // Fungsi Validasi
-const validateBpjsNumber = (bpjsNumber) => {
-  // Harus diawali dengan angka nol (0)
-  if (bpjsNumber.length > 0 && bpjsNumber[0] !== '0') {
-    return "Nomor BPJS harus diawali dengan angka 0.";
-  }
-  
-  // Jumlah digit harus 13
-  if (bpjsNumber.length !== 13) {
+const validateBpjsId = (bpjsId) => {
+  // Jumlah digit harus 13 dan diawali dengan angka nol
+  if (bpjsId.length !== 13) {
     return "Nomor BPJS harus terdiri dari 13 digit.";
   }
-
+  if (bpjsId[0] !== '0') {
+    return "Nomor BPJS harus diawali dengan angka 0.";
+  }
   return ""; // Tidak ada error
 };
 
@@ -143,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BPJSScreen;
+export default BpjsScreen;

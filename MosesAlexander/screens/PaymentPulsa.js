@@ -1,33 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { TransactionContext } from './TransactionContext';
 
-// Import valid prefixes from PulsaDataScreen
-const validPrefixes = {
-  Telkomsel: ['0811', '0812', '0813', '0821', '0822', '0823'],
-  Indosat: ['0852', '0853', '0814', '0815', '0816'],
-  XL: ['0851', '0855', '0856', '0857', '0858'],
-  Tri: ['0895', '0896', '0897', '0898', '0899'],
-  Smartfren: ['0881', '0882', '0883', '0884', '0885', '0886', '0887', '0888', '0889'],
-};
-
-// Helper function to determine the operator based on the phone number prefix
-const getOperatorLabel = (phoneNumber) => {
-  const prefix = phoneNumber.slice(0, 4); // Get the first 4 digits
-
-  for (const [operator, prefixes] of Object.entries(validPrefixes)) {
-    if (prefixes.includes(prefix)) {
-      return operator;
-    }
-  }
+const PaymentPulsa = ({ navigation }) => {
+  const { transactionData } = useContext(TransactionContext); // Ambil data dari context
   
-  return 'Unknown Operator'; // Default if no match found
-};
+  // Debug: Log data dari context
+  console.log('Transaction Data:', transactionData);
 
-const PaymentPulsa = ({ route, navigation }) => {
-  const { packageData, phoneNumber } = route.params; // Terima data dari navigasi
+  // Mengambil informasi paket dan nomor telepon dari transactionData
+  const { packageData, phoneNumber } = transactionData; 
 
-  // Determine the package label dynamically
-  const packageLabel = getOperatorLabel(phoneNumber);
+  // Debug: Cek apakah data sudah terisi
+  if (!packageData || !phoneNumber) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Data transaksi belum diisi.</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -35,8 +26,9 @@ const PaymentPulsa = ({ route, navigation }) => {
 
       {/* Informasi Paket yang Dipilih */}
       <View style={styles.packageInfo}>
-        <Text style={styles.packageLabel}>{packageLabel}</Text> {/* Dynamic operator name */}
-        <Text style={styles.phoneNumber}>{phoneNumber}</Text>
+        <Text style={styles.packageLabel}>Operator: {getOperatorLabel(phoneNumber)}</Text> 
+        <Text style={styles.phoneNumber}>Nomor Telepon: {phoneNumber}</Text>
+        <Text style={styles.packagePrice}>Paket: {packageData.value}</Text>
         <Text style={styles.packagePrice}>Rp {packageData.price.toLocaleString()}</Text>
       </View>
 
@@ -47,7 +39,7 @@ const PaymentPulsa = ({ route, navigation }) => {
           <Text>Saldo saya</Text>
           <Text>Rp 900.000</Text>
         </View>
-        <Text>Rp {packageData.price.toLocaleString()}</Text>
+        <Text>Total Pembayaran: Rp {packageData.price.toLocaleString()}</Text>
       </View>
 
       {/* Detail Pembayaran */}
@@ -68,11 +60,38 @@ const PaymentPulsa = ({ route, navigation }) => {
       </View>
 
       {/* Tombol Konfirmasi */}
-      <TouchableOpacity style={styles.confirmButton} onPress={() => alert('Pembayaran Berhasil!')}>
+      <TouchableOpacity 
+        style={styles.confirmButton} 
+        onPress={() => {
+          alert('Pembayaran Berhasil!'); 
+          navigation.navigate('PinConfirmation'); // Arahkan ke halaman konfirmasi PIN
+        }}
+      >
         <Text style={styles.confirmButtonText}>Konfirmasi</Text>
       </TouchableOpacity>
     </View>
   );
+};
+
+// Helper function to determine the operator based on the phone number prefix
+const getOperatorLabel = (phoneNumber) => {
+  const validPrefixes = {
+    Telkomsel: ['0811', '0812', '0813', '0821', '0822', '0823'],
+    Indosat: ['0852', '0853', '0814', '0815', '0816'],
+    XL: ['0851', '0855', '0856', '0857', '0858'],
+    Tri: ['0895', '0896', '0897', '0898', '0899'],
+    Smartfren: ['0881', '0882', '0883', '0884', '0885', '0886', '0887', '0888', '0889'],
+  };
+
+  const prefix = phoneNumber.slice(0, 4); // Ambil 4 digit pertama
+
+  for (const [operator, prefixes] of Object.entries(validPrefixes)) {
+    if (prefixes.includes(prefix)) {
+      return operator;
+    }
+  }
+  
+  return 'Unknown Operator'; // Default jika tidak ditemukan
 };
 
 const styles = StyleSheet.create({
@@ -149,6 +168,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
   },
 });
 

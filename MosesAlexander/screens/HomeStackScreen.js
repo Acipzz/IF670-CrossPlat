@@ -7,6 +7,7 @@ import BPJSScreen from './BpjsScreen';
 import PaymentToken from './PaymentToken';
 import PaymentPulsa from './PaymentPulsa';
 import PaymentBPJS from './PaymentBPJS';
+import PinConfirmationScreen from './PinConfirmationScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ const HomeStackScreen = () => {
       <Stack.Screen name="PaymentPulsa" component={PaymentPulsa} />
       <Stack.Screen name="PaymentToken" component={PaymentToken} />
       <Stack.Screen name="PaymentBPJS" component={PaymentBPJS} />
+      <Stack.Screen name="PinConfirmation" component={PinConfirmationScreen} />
     </Stack.Navigator>
   );
 };

@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { TransactionContext } from './TransactionContext';
 
-const PaymentToken = ({ route, navigation }) => {
-  const { tokenData, customerId } = route.params; // Terima data dari navigasi
+const PaymentToken = ({ navigation }) => {
+  const { transactionData } = useContext(TransactionContext);
+
+  console.log('Transaction Data:', transactionData);
+
+  const { packageData, plnId } = transactionData; // Ambil data dari context
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Konfirmasi Pembayaran</Text>
+      <Text style={styles.header}>Konfirmasi Pembayaran Token Listrik</Text>
 
       {/* Informasi Paket yang Dipilih */}
       <View style={styles.packageInfo}>
-        <Text style={styles.customerId}>{customerId}</Text>
-        <Text style={styles.packagePrice}>Rp {tokenData.price.toLocaleString()}</Text>
+        <Text style={styles.packageLabel}>ID Pelanggan: {plnId}</Text>
+        <Text style={styles.packagePrice}>Paket: {packageData.value}</Text>
+        <Text style={styles.packagePrice}>Rp {packageData.price.toLocaleString()}</Text>
       </View>
 
       {/* Metode Pembayaran */}
@@ -21,15 +27,15 @@ const PaymentToken = ({ route, navigation }) => {
           <Text>Saldo saya</Text>
           <Text>Rp 900.000</Text>
         </View>
-        <Text>Rp {tokenData.price.toLocaleString()}</Text>
+        <Text>Total Pembayaran: Rp {packageData.price.toLocaleString()}</Text>
       </View>
 
       {/* Detail Pembayaran */}
       <View style={styles.paymentDetails}>
         <Text style={styles.detailsTitle}>Detail Pembayaran</Text>
         <View style={styles.detailRow}>
-          <Text>Harga Token</Text>
-          <Text>Rp {tokenData.price.toLocaleString()}</Text>
+          <Text>Harga Voucher</Text>
+          <Text>Rp {packageData.price.toLocaleString()}</Text>
         </View>
         <View style={styles.detailRow}>
           <Text>Biaya Transaksi</Text>
@@ -37,12 +43,18 @@ const PaymentToken = ({ route, navigation }) => {
         </View>
         <View style={styles.totalRow}>
           <Text>Total Pembayaran</Text>
-          <Text>Rp {tokenData.price.toLocaleString()}</Text>
+          <Text>Rp {packageData.price.toLocaleString()}</Text>
         </View>
       </View>
 
       {/* Tombol Konfirmasi */}
-      <TouchableOpacity style={styles.confirmButton} onPress={() => alert('Pembayaran Berhasil!')}>
+      <TouchableOpacity 
+        style={styles.confirmButton} 
+        onPress={() => {
+          alert('Pembayaran Token Listrik Berhasil!'); 
+          navigation.navigate('PinConfirmation'); // Arahkan ke halaman konfirmasi PIN
+        }}
+      >
         <Text style={styles.confirmButtonText}>Konfirmasi</Text>
       </TouchableOpacity>
     </View>
@@ -68,9 +80,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  customerId: {
-    fontSize: 16,
-    marginVertical: 10,
+  packageLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   packagePrice: {
     fontSize: 24,

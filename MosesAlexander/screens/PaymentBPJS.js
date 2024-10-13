@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { TransactionContext } from './TransactionContext';
 
-const PaymentBPJS = ({ route, navigation }) => {
-  const { bpjsData, bpjsNumber } = route.params; // Terima data dari navigasi
+const PaymentBPJS = ({ navigation }) => {
+  const { transactionData } = useContext(TransactionContext); // Ambil data dari context
+
+  console.log('Transaction Data:', transactionData);
+
+  const { packageData, bpjsId } = transactionData; // Ambil data BPJS dan paket dari context
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Konfirmasi Pembayaran</Text>
+      <Text style={styles.header}>Konfirmasi Pembayaran BPJS</Text>
 
       {/* Informasi Paket yang Dipilih */}
       <View style={styles.packageInfo}>
-        <Text style={styles.customerId}>{bpjsNumber}</Text> {/* Tampilkan nomor BPJS */}
-        <Text style={styles.packagePrice}>Rp {bpjsData.price.toLocaleString()}</Text> {/* Tampilkan harga */}
+        <Text style={styles.packageLabel}>ID BPJS: {bpjsId}</Text>
+        <Text style={styles.packagePrice}>Paket: {packageData.value}</Text>
+        <Text style={styles.packagePrice}>Rp {packageData.price.toLocaleString()}</Text>
       </View>
 
       {/* Metode Pembayaran */}
@@ -21,15 +27,15 @@ const PaymentBPJS = ({ route, navigation }) => {
           <Text>Saldo saya</Text>
           <Text>Rp 900.000</Text>
         </View>
-        <Text>Rp {bpjsData.price.toLocaleString()}</Text> {/* Tampilkan total harga */}
+        <Text>Total Pembayaran: Rp {packageData.price.toLocaleString()}</Text>
       </View>
 
       {/* Detail Pembayaran */}
       <View style={styles.paymentDetails}>
         <Text style={styles.detailsTitle}>Detail Pembayaran</Text>
         <View style={styles.detailRow}>
-          <Text>Harga BPJS</Text>
-          <Text>Rp {bpjsData.price.toLocaleString()}</Text>
+          <Text>Harga Voucher</Text>
+          <Text>Rp {packageData.price.toLocaleString()}</Text>
         </View>
         <View style={styles.detailRow}>
           <Text>Biaya Transaksi</Text>
@@ -37,12 +43,18 @@ const PaymentBPJS = ({ route, navigation }) => {
         </View>
         <View style={styles.totalRow}>
           <Text>Total Pembayaran</Text>
-          <Text>Rp {bpjsData.price.toLocaleString()}</Text> {/* Tampilkan total harga */}
+          <Text>Rp {packageData.price.toLocaleString()}</Text>
         </View>
       </View>
 
       {/* Tombol Konfirmasi */}
-      <TouchableOpacity style={styles.confirmButton} onPress={() => alert('Pembayaran Berhasil!')}>
+      <TouchableOpacity 
+        style={styles.confirmButton} 
+        onPress={() => {
+          alert('Pembayaran BPJS Berhasil!'); 
+          navigation.navigate('PinConfirmation'); // Arahkan ke halaman konfirmasi PIN
+        }}
+      >
         <Text style={styles.confirmButtonText}>Konfirmasi</Text>
       </TouchableOpacity>
     </View>
@@ -68,9 +80,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  customerId: {
-    fontSize: 16,
-    marginVertical: 10,
+  packageLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   packagePrice: {
     fontSize: 24,

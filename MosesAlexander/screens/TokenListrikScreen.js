@@ -1,73 +1,67 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { TransactionContext } from './TransactionContext';
 
 const TokenListrikScreen = () => {
-  const [customerId, setCustomerId] = useState('');
-  const [errorMessage, setErrorMessage] = useState('ID pelanggan tidak valid.'); // Pesan error default
+  const { transactionData, updateTransactionData } = useContext(TransactionContext);
+  const [errorMessage, setErrorMessage] = useState('ID pelanggan tidak valid.');
 
-  const navigation = useNavigation(); // Gunakan useNavigation untuk navigasi
+  const navigation = useNavigation();
 
-  // Data pilihan token listrik
   const tokenOptions = [
-    { value: '20.000', price: 21500 },
-    { value: '50.000', price: 51500 },
-    { value: '100.000', price: 101500 },
-    { value: '200.000', price: 201500 },
-    { value: '500.000', price: 501500 },
+    { value: '13,2 kWh', price: 20000 },
+    { value: '33,1 kWh', price: 50000 },
+    { value: '66,2 kWh', price: 100000 },
+    { value: '132,3 kWh', price: 200000 },
+    { value: '328,9 kWh', price: 500000 },
+    { value: '659,7 kWh', price: 1000000 },
   ];
 
-  // Fungsi untuk memvalidasi ID pelanggan
   const handleCustomerIdChange = (input) => {
-    setCustomerId(input);
+    updateTransactionData('customerId', input);
     const validationError = validateCustomerId(input);
-    setErrorMessage(validationError); // Set pesan error jika ada
+    setErrorMessage(validationError);
   };
 
-  // Fungsi untuk navigasi ke halaman konfirmasi
-  const handleOptionPress = (tokenData) => {
-    navigation.navigate('PaymentToken', { tokenData, customerId });
-  };
-
-  // Fungsi untuk merender kartu token listrik
   const renderOption = ({ item }) => (
-    <TouchableOpacity style={styles.optionCard} onPress={() => handleOptionPress(item)}>
+    <TouchableOpacity 
+      style={styles.optionCard} 
+      onPress={() => handleOptionPress(item)}
+    >
       <Text style={styles.optionValue}>{item.value}</Text>
       <Text style={styles.optionPrice}>Harga Rp {item.price.toLocaleString()}</Text>
     </TouchableOpacity>
   );
 
-  // Tampilkan komponen jika nomor valid
+  const handleOptionPress = (tokenData) => {
+    updateTransactionData('packageData', tokenData);
+    navigation.navigate('PaymentToken'); // Navigasi ke halaman pembayaran
+  };
+
   const isValidCustomerId = errorMessage === "";
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <Text style={styles.header}>Token Listrik</Text>
 
-      {/* Input ID Pelanggan */}
       <View style={styles.inputContainer}>
         <TextInput
-          style={[styles.input, errorMessage && { borderColor: 'red' }]} // Warnai merah jika error
-          placeholder="Contoh : 232111074358"
-          value={customerId}
+          style={[styles.input, errorMessage && { borderColor: 'red' }]}
+          placeholder="Contoh: 232111074358"
+          value={transactionData.customerId}
           onChangeText={handleCustomerIdChange}
-          keyboardType="numeric"
         />
       </View>
 
-      {/* Tampilkan Pesan Error Jika Ada */}
-      {errorMessage ? (
-        <Text style={styles.errorText}>{errorMessage}</Text>
-      ) : null}
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
-      {/* Render pilihan token listrik hanya jika ID pelanggan valid */}
       {isValidCustomerId && (
         <FlatList
           data={tokenOptions}
           renderItem={renderOption}
           keyExtractor={(item) => item.value}
-          numColumns={2} // Menampilkan dalam dua kolom
+          numColumns={2}
           contentContainerStyle={styles.grid}
         />
       )}
@@ -77,12 +71,10 @@ const TokenListrikScreen = () => {
 
 // Fungsi Validasi
 const validateCustomerId = (customerId) => {
-  // Harus diawali dengan angka selain nol
   if (customerId.length > 0 && customerId[0] === '0') {
     return "ID pelanggan tidak boleh diawali dengan angka 0.";
   }
   
-  // Jumlah digit harus maksimal 12
   if (customerId.length > 12) {
     return "ID pelanggan maksimal 12 digit.";
   }
