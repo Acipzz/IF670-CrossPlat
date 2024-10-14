@@ -27,23 +27,23 @@ const PinConfirmationScreen = () => {
     return result;
   };
   
-  const handleConfirm = (enteredPin) => {
-    if (enteredPin === correctPin) {
-      const selectedIdentifier = transactionData.selectedPackage?.type; // Tipe paket yang dipilih
-  
-      let transactionIdentifier;
-      if (selectedIdentifier === 'pulsa') {
-        transactionIdentifier = transactionData.phoneNumber; // Menggunakan nomor telepon untuk pulsa
-      } else if (selectedIdentifier === 'listrik') {
-        transactionIdentifier = transactionData.plnId; // Menggunakan PLN ID untuk listrik
-      } else if (selectedIdentifier === 'bpjs') {
-        transactionIdentifier = transactionData.bpjsId; // Menggunakan BPJS ID untuk BPJS
-      } else {
-        console.log("Jenis transaksi tidak dikenali: ", selectedIdentifier);
-      }
-  
-      console.log("Transaction Identifier: ", transactionIdentifier); // Log untuk memastikan identifier diatur
-  
+ const handleConfirm = (enteredPin) => {
+  if (enteredPin === correctPin) {
+    const selectedIdentifier = transactionData.selectedPackage?.type; // Tipe paket yang dipilih
+
+    let transactionIdentifier;
+    if (selectedIdentifier === 'pulsa') {
+      transactionIdentifier = transactionData.phoneNumber; // Menggunakan nomor telepon untuk pulsa
+    } else if (selectedIdentifier === 'listrik') {
+      transactionIdentifier = transactionData.plnId; // Menggunakan PLN ID untuk listrik
+    } else if (selectedIdentifier === 'bpjs') {
+      transactionIdentifier = transactionData.bpjsId; // Menggunakan BPJS ID untuk BPJS
+    } else {
+      console.log("Jenis transaksi tidak dikenali: ", selectedIdentifier);
+    }
+
+    console.log("Transaction Identifier: ", transactionIdentifier); // Log untuk memastikan identifier diatur
+
       const newTransaction = {
         id: Math.random().toString(),
         traceNo: Date.now().toString().slice(-6),
