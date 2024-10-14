@@ -11,6 +11,7 @@ import PaymentBPJS from './PaymentBPJS';
 import PinConfirmationScreen from './PinConfirmationScreen';
 import TransactionSuccessScreen from './TransactionSuccessScreen';
 import TransactionHistoryScreen from './TransactionHistoryScreen';
+import TransactionDetailScreen from './TransactionDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,7 @@ const HomeStackScreen = () => {
       <Stack.Screen name="PinConfirmation" component={PinConfirmationScreen} options={{ headerShown: false }} />
       <Stack.Screen name="TransactionSuccess" component={TransactionSuccessScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Riwayat" component={TransactionHistoryScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Detail" component={TransactionDetailScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };

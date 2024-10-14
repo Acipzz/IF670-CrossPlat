@@ -18,8 +18,32 @@ const PinConfirmationScreen = () => {
     }
   }, [transactionData.pin]);
 
+  
+  const generateRandomNumber = (length) => {
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += Math.floor(Math.random() * 10); // Angka acak 0-9
+    }
+    return result;
+  };
+  
   const handleConfirm = (enteredPin) => {
     if (enteredPin === correctPin) {
+      const selectedIdentifier = transactionData.selectedPackage?.type; // Tipe paket yang dipilih
+  
+      let transactionIdentifier;
+      if (selectedIdentifier === 'pulsa') {
+        transactionIdentifier = transactionData.phoneNumber; // Menggunakan nomor telepon untuk pulsa
+      } else if (selectedIdentifier === 'listrik') {
+        transactionIdentifier = transactionData.plnId; // Menggunakan PLN ID untuk listrik
+      } else if (selectedIdentifier === 'bpjs') {
+        transactionIdentifier = transactionData.bpjsId; // Menggunakan BPJS ID untuk BPJS
+      } else {
+        console.log("Jenis transaksi tidak dikenali: ", selectedIdentifier);
+      }
+  
+      console.log("Transaction Identifier: ", transactionIdentifier); // Log untuk memastikan identifier diatur
+  
       const newTransaction = {
         id: Math.random().toString(),
         traceNo: Date.now().toString().slice(-6),
@@ -27,10 +51,17 @@ const PinConfirmationScreen = () => {
         date: new Date().toLocaleString(),
         amount: `Rp ${transactionData.packageData?.price.toLocaleString()}`,
         status: 'Berhasil',
+        transactionIdentifier, // Menyimpan identifier yang sesuai
+        transactionType: 'SALE', // Menggunakan 'SALE' sebagai tipe transaksi
+        cardType: 'Kartu UNIONPAY CREDIT', // Menggunakan jenis kartu yang sesuai
+        cardNumber: `************${generateRandomNumber(4)}`, // Menghasilkan nomor kartu
+        batch: generateRandomNumber(6), // Menghasilkan batch
+        referenceNo: generateRandomNumber(6), // Menghasilkan reference no
+        approvalCode: generateRandomNumber(6), // Menghasilkan approval code
       };
-
+  
       addTransactionToHistory(newTransaction); // Tambahkan transaksi ke riwayat
-
+  
       Alert.alert('Pembayaran berhasil!', 'Transaksi Anda telah berhasil diproses.');
       updateTransactionData('transactionStatus', 'success');
       Keyboard.dismiss();
@@ -44,6 +75,9 @@ const PinConfirmationScreen = () => {
       }, 1000); 
     }
   };
+  
+  
+  
 
   const handlePinChange = (input) => {
     if (isError) setIsError(false); // Reset status error

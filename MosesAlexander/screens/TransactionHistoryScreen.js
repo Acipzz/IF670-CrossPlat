@@ -12,28 +12,35 @@ const TransactionHistoryScreen = ({ navigation }) => {
   );
 
   const renderItem = ({ item }) => (
-    <View style={styles.transactionItem}>
+    <TouchableOpacity 
+      style={styles.transactionItem} 
+      onPress={() => navigation.navigate('Detail', { transaction: item })}
+    >
       <View style={styles.transactionDetails}>
         <Text style={styles.traceNo}>Trace No. {item.traceNo}</Text>
-        <Text style={styles.transactionType}>{item.type}</Text>
-        <Text style={styles.status}>{item.status}</Text>
+        <Text style={styles.transactionType}>Paket. {item.type}</Text>
+        <Text style={styles.phoneNumber}>Nomor Telepon: {item.phoneNumber}</Text>
+        <Text style={styles.status}>
+          {item.status === 'success' ? 'Pembayaran Berhasil!' : item.status}
+        </Text>
       </View>
       <View style={styles.transactionMeta}>
         <Text style={styles.date}>{item.date}</Text>
         <Text style={styles.amount}>{item.amount}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
+  
 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Feather name="arrow-left" size={32} color="#000" />
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Feather name="arrow-left" size={32} color="#000" />
+        </TouchableOpacity>
 
-      <Text style={styles.header}>Riwayat Transaksi</Text>
-    </View>
+        <Text style={styles.header}>Riwayat Transaksi</Text>
+      </View>
 
       <View style={styles.searchContainer}>
         <Feather name="search" size={20} color="#aaa" />
@@ -60,68 +67,71 @@ const styles = StyleSheet.create({
     flex: 1, 
     backgroundColor: '#fff', 
     padding: 20, 
-},
-headerContainer: {
-    flexDirection: 'row', // Mengatur back button dan header dalam satu baris
-    alignItems: 'center', // Memastikan mereka sejajar secara vertikal
+  },
+  headerContainer: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
     marginBottom: 20,
     paddingTop: 20, 
+  },
+  backButton: {
+    paddingRight: 10, 
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    flex: 1, // Membuat teks berada di tengah dengan fleksibilitas
+    flex: 1,
   },
   searchContainer: {
-    flexDirection: 'row', 
-    alignItems: 'center', 
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#f1f1f1',
-    borderRadius: 10, 
-    paddingHorizontal: 10, 
+    borderRadius: 10,
+    paddingHorizontal: 10,
     marginBottom: 20,
   },
-  searchInput: { 
-    flex: 1, 
-    padding: 10, 
+  searchInput: {
+    flex: 1,
+    padding: 10,
     fontSize: 16,
- },
+  },
   transactionItem: { 
     flexDirection: 'row', 
     justifyContent: 'space-between', 
     paddingVertical: 10, 
-},
+  },
   transactionDetails: { 
     flex: 1, 
-},
+  },
   traceNo: { 
     fontSize: 16, 
     fontWeight: 'bold', 
-},
+  },
   transactionType: { 
     fontSize: 14, 
     color: '#555', 
-},
+  },
   status: { 
     fontSize: 14, 
     color: 'green', 
-},
+  },
   transactionMeta: { 
     alignItems: 'flex-end', 
-},
+  },
   date: { 
     fontSize: 12, 
     color: '#888', 
-},
+  },
   amount: { 
     fontSize: 16, 
     fontWeight: 'bold', 
-},
+  },
   separator: { 
     height: 1, 
     backgroundColor: '#ddd', 
     marginVertical: 5, 
-},
+  },
 });
 
 export default TransactionHistoryScreen;

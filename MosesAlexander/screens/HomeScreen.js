@@ -1,51 +1,79 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { TransactionContext } from './TransactionContext';
 
 const HomeScreen = ({ navigation }) => {
+  const { updateTransactionData } = useContext(TransactionContext); // Ambil updateTransactionData dari context
+
+  // Di tempat pemilihan paket, misalnya di HomeScreen.js
+const handleOptionSelect = (option) => {
+  // Setel selectedPackage berdasarkan pilihan pengguna
+  updateTransactionData('selectedPackage', { type: option });
+  
+  // Setel data yang sesuai berdasarkan pilihan
+  if (option === 'pulsa') {
+    updateTransactionData('phoneNumber', '08829802093'); // Contoh nomor telepon
+  } else if (option === 'listrik') {
+    updateTransactionData('plnId', '123456789'); // Contoh PLN ID
+  } else if (option === 'bpjs') {
+    updateTransactionData('bpjsId', '987654321'); // Contoh BPJS ID
+  }
+};
+
+
   return (
     <View style={styles.container}>
-        {/* Profile Section */}
-        <View style={styles.profile}>
-            <View style={styles.nameProf}>
-              <Text style={styles.titleProf}>Moses Alexander</Text>
-              <Text style={styles.yearProf}>2022</Text>
-            </View>
-            <View style={styles.divider}/>
-            <View style={styles.headerButtons}>
-                <TouchableOpacity style={styles.headerButton}>
-                  <Text style={styles.headerButtonText}>Transfer</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.headerButton}>
-                  <Text style={styles.headerButtonText}>Tarik Tunai</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.headerButton}>
-                  <Text style={styles.headerButtonText}>More</Text>
-                </TouchableOpacity>
-            </View>
+      {/* Profile Section */}
+      <View style={styles.profile}>
+        <View style={styles.nameProf}>
+          <Text style={styles.titleProf}>Moses Alexander</Text>
+          <Text style={styles.yearProf}>2022</Text>
         </View>
+        <View style={styles.divider} />
+        <View style={styles.headerButtons}>
+          <TouchableOpacity style={styles.headerButton}>
+            <Text style={styles.headerButtonText}>Transfer</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerButton}>
+            <Text style={styles.headerButtonText}>Tarik Tunai</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerButton}>
+            <Text style={styles.headerButtonText}>More</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
-        {/* Transaction Selection */}
-        <Text style={styles.title}>Pilih Transaksi</Text>
-        <View style={styles.pembayaran}>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate('PulsaData')}  // Ubah navigasi ke Pulsa
-                >
-                <Text style={styles.buttonText}>Pulsa/Data</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate('TokenListrik')}
-                >
-                <Text style={styles.buttonText}>Token Listrik</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate('BPJS')}
-                >
-                <Text style={styles.buttonText}>BPJS</Text>
-            </TouchableOpacity>
-        </View>
+      {/* Transaction Selection */}
+      <Text style={styles.title}>Pilih Transaksi</Text>
+      <View style={styles.pembayaran}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            handleOptionSelect('pulsa'); // Setel jenis paket
+            navigation.navigate('PulsaData');  // Navigasi ke Pulsa
+          }}
+        >
+          <Text style={styles.buttonText}>Pulsa/Data</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            handleOptionSelect('listrik'); // Setel jenis paket
+            navigation.navigate('TokenListrik');
+          }}
+        >
+          <Text style={styles.buttonText}>Token Listrik</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            handleOptionSelect('bpjs'); // Setel jenis paket
+            navigation.navigate('BPJS');
+          }}
+        >
+          <Text style={styles.buttonText}>BPJS</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

@@ -29,7 +29,7 @@ const PaymentPulsa = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.header}>Konfirmasi Pembayaran</Text>
       </View>
-      {/* Informasi Paket yang Dipilih */}
+      
       <View style={styles.packageInfo}>
         <Text style={styles.packageLabel}>Operator: {getOperatorLabel(phoneNumber)}</Text> 
         <Text style={styles.phoneNumber}>Nomor Telepon: {phoneNumber}</Text>

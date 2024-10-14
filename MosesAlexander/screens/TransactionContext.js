@@ -12,6 +12,12 @@ export const TransactionProvider = ({ children }) => {
     selectedPackage: null, // Paket/token yang dipilih
     pin: '', // Tambahkan field untuk menyimpan PIN
     transactionStatus: '',
+    transactionType: 'SALE', 
+    cardType: 'Kartu UNIONPAY CREDIT', 
+    cardNumber: '', // Menambahkan cardNumber
+    batch: '', // Menambahkan batch
+    referenceNo: '', // Menambahkan referenceNo
+    approvalCode: '', // Menambahkan approvalCode
   });
 
   const [transactionHistory, setTransactionHistory] = useState([]); // Riwayat transaksi
