@@ -34,7 +34,7 @@ const TokenListrikScreen = () => {
   ];
 
   const handleCustomerIdChange = (input) => {
-    updateTransactionData('customerId', input);
+    updateTransactionData('plnId', input);
     const validationError = validateCustomerId(input);
     setErrorMessage(validationError);
   };
