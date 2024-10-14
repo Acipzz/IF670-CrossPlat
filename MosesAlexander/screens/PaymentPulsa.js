@@ -29,7 +29,7 @@ const PaymentPulsa = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.header}>Konfirmasi Pembayaran</Text>
       </View>
-      
+
       <View style={styles.packageInfo}>
         <Text style={styles.packageLabel}>Operator: {getOperatorLabel(phoneNumber)}</Text> 
         <Text style={styles.phoneNumber}>Nomor Telepon: {phoneNumber}</Text>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-    paddingTop: 20,
+    paddingTop: 30,
   },
   
   header: {

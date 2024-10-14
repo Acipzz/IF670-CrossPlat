@@ -144,11 +144,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     paddingTop: 20,
-  },headerContainer: {
+  },
+  headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-    paddingTop: 20,
+    paddingTop: 30,
   },
   header: {
     fontSize: 20,

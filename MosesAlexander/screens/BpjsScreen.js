@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Mengatur back button dan header dalam satu baris
     alignItems: 'center', // Memastikan mereka sejajar secara vertikal
     marginBottom: 20,
-    paddingTop: 20,
+    paddingTop: 30,
   },
   
   header: {
