@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { TransactionContext } from './TransactionContext';
+import { Feather } from '@expo/vector-icons';
 
 const PaymentBPJS = ({ navigation }) => {
   const { transactionData } = useContext(TransactionContext); // Ambil data dari context
@@ -11,9 +12,13 @@ const PaymentBPJS = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Konfirmasi Pembayaran BPJS</Text>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Feather name="arrow-left" size={30} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.header}>Konfirmasi Pembayaran</Text>
+      </View>
 
-      {/* Informasi Paket yang Dipilih */}
       <View style={styles.packageInfo}>
         <Text style={styles.packageLabel}>ID BPJS: {bpjsId}</Text>
         <Text style={styles.packagePrice}>Paket: {packageData.value}</Text>
@@ -66,11 +71,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingTop: 20,
+  },
+  
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
     textAlign: 'center',
+    flex: 1,
   },
   packageInfo: {
     backgroundColor: '#f0f0f0',

@@ -41,12 +41,13 @@ const BpjsScreen = () => {
   const renderOption = ({ item }) => (
     <TouchableOpacity 
       style={styles.optionCard} 
-      onPress={() => handleOptionPress(item)}
+      onPress={() => handleOptionPress(item, navigation, 'PaymentBPJS')}
     >
       <Text style={styles.optionValue}>{item.value}</Text>
-      <Text style={styles.optionPrice}>Harga Rp {item.price.toLocaleString()}</Text>
+      <Text style={styles.optionPrice}>Rp {item.price.toLocaleString()}</Text>
     </TouchableOpacity>
   );
+  
 
   const handleOptionPress = (nominalData) => {
     updateTransactionData('packageData', nominalData); // Simpan nominal yang dipilih di context
@@ -57,10 +58,12 @@ const BpjsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Feather name="arrow-left" size={30} color="#000" />
-      </TouchableOpacity>
-      <Text style={styles.header}>Pembayaran BPJS</Text>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Feather name="arrow-left" size={30} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.header}>BPJS</Text>
+      </View>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -105,18 +108,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
-  },backButton: {
-    position: 'absolute',
-    left: 10, // Jarak kiri dari layar
-    top: 50,  // Jarak dari atas
-    padding: 10,
   },
+  headerContainer: {
+    flexDirection: 'row', // Mengatur back button dan header dalam satu baris
+    alignItems: 'center', // Memastikan mereka sejajar secara vertikal
+    marginBottom: 20,
+    paddingTop: 20,
+  },
+  
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'center', // Tetap berada di tengah layar
-    marginTop: 40, // Jarak dari atas untuk menyesuaikan dengan ikon
-    marginBottom: 20,
+    textAlign: 'center',
+    flex: 1, // Membuat teks berada di tengah dengan fleksibilitas
   },
   inputContainer: {
     marginBottom: 20,

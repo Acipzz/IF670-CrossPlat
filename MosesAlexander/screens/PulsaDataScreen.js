@@ -11,15 +11,12 @@ const PulsaDataScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-
     const parentNavigator = navigation.getParent();
     if (parentNavigator) {
       parentNavigator.setOptions({
         tabBarStyle: { display: 'none' }
       });
     }
-
-    // Mengembalikan bottom navbar saat keluar dari layar PulsaDataScreen
     return () => {
       if (parentNavigator) {
         parentNavigator.setOptions({
@@ -28,7 +25,6 @@ const PulsaDataScreen = () => {
       }
     };
   }, [navigation]);
-
 
   // Data pilihan pulsa
   const pulsaOptions = [
@@ -44,20 +40,24 @@ const PulsaDataScreen = () => {
     { value: '100.000', price: 101500 },
   ];
 
-  // Data pilihan paket data
+  // Tambahkan data untuk paket data
   const dataPackages = [
     { value: '1 GB', price: 10000 },
-    { value: '3 GB', price: 25000 },
-    { value: '5 GB', price: 40000 },
-    { value: '10 GB', price: 75000 },
-    { value: '20 GB', price: 130000 },
-    { value: '50 GB', price: 250000 },
+    { value: '5 GB', price: 50000 },
+    { value: '10 GB', price: 100000 },
+    { value: '30 GB', price: 250000 },
+    { value: 'Unlimited', price: 300000 },
   ];
 
   const handlePhoneNumberChange = (input) => {
     updateTransactionData('phoneNumber', input);
     const validationError = validatePhoneNumber(input);
     setErrorMessage(validationError);
+  };
+
+  const handleOptionPress = (packageData) => {
+    updateTransactionData('packageData', packageData); // Simpan packageData di context
+    navigation.navigate('PaymentPulsa'); // Navigasi tanpa parameter
   };
 
   const renderOption = ({ item }) => (
@@ -70,25 +70,19 @@ const PulsaDataScreen = () => {
     </TouchableOpacity>
   );
 
-  const handleOptionPress = (packageData) => {
-    updateTransactionData('packageData', packageData); // Simpan packageData di context
-    navigation.navigate('PaymentPulsa'); // Navigasi tanpa parameter
-  };
-
   const isValidPhoneNumber = errorMessage === "";
 
   return (
     <View style={styles.container}>
-      {/* Ikon panah kiri di posisi absolut */}
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Feather name="arrow-left" size={30} color="#000" />
-      </TouchableOpacity>
-
-      {/* Teks "Pulsa & Paket Data" di tengah layar */}
-      <Text style={styles.header}>Pulsa & Paket Data</Text>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Feather name="arrow-left" size={30} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.header}>Pulsa & Paket Data</Text>
+      </View>
 
       <Text style={styles.text1}> Nomor Ponsel </Text>
-      
+
       <View style={styles.inputContainer}>
         <TextInput
           style={[styles.input, errorMessage && { borderColor: 'red' }]}
@@ -145,31 +139,37 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
-  backButton: {
-    position: 'absolute',
-    left: 10, // Jarak kiri dari layar
-    top: 50,  // Jarak dari atas
-    padding: 10,
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingTop: 20,
+  },headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingTop: 20,
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'center', // Tetap berada di tengah layar
-    marginTop: 40, // Jarak dari atas untuk menyesuaikan dengan ikon
-    marginBottom: 20,
+    textAlign: 'center',
+    flex: 1,
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    flex: 1,
   },
   text1: {
     fontSize: 12,
     color: '#555',
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 10,
-    marginTop: 5,
   },
   input: {
-    flex: 1,
     height: 50,
     borderColor: '#dcdcdc',
     borderWidth: 1,

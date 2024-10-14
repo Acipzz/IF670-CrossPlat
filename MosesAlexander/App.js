@@ -3,11 +3,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeStackScreen from './screens/HomeStackScreen';
 import ProfileScreen from './screens/ProfileScreen'; // Assume profile screen exists
-import History from './screens/History';
 import Bayar from './screens/Bayar';
 import Notifikasi from './screens/Notifikasi';
 import { TransactionProvider } from './screens/TransactionContext';
 import { Keyboard } from 'react-native'; // Impor Keyboard
+import TransactionHistoryScreen from './screens/TransactionHistoryScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,7 +43,7 @@ export default function App() {
             component={HomeStackScreen}
             options={{headerShown: false}} 
           />
-          <Tab.Screen name="Riwayat" component={History} />
+          <Tab.Screen name="Riwayat" component={TransactionHistoryScreen} />
           <Tab.Screen name="Bayar" component={Bayar} />
           <Tab.Screen name="Notifikasi" component={Notifikasi} />
           <Tab.Screen name="Profil" component={ProfileScreen} />
