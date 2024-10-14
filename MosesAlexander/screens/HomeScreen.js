@@ -9,15 +9,6 @@ const HomeScreen = ({ navigation }) => {
 const handleOptionSelect = (option) => {
   // Setel selectedPackage berdasarkan pilihan pengguna
   updateTransactionData('selectedPackage', { type: option });
-  
-  // Setel data yang sesuai berdasarkan pilihan
-  if (option === 'pulsa') {
-    updateTransactionData('phoneNumber', '08829802093'); // Contoh nomor telepon
-  } else if (option === 'listrik') {
-    updateTransactionData('plnId', '123456789'); // Contoh PLN ID
-  } else if (option === 'bpjs') {
-    updateTransactionData('bpjsId', '987654321'); // Contoh BPJS ID
-  }
 };
 
 

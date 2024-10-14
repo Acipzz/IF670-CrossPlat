@@ -19,7 +19,6 @@ const TransactionHistoryScreen = ({ navigation }) => {
       <View style={styles.transactionDetails}>
         <Text style={styles.traceNo}>Trace No. {item.traceNo}</Text>
         <Text style={styles.transactionType}>Paket. {item.type}</Text>
-        <Text style={styles.phoneNumber}>Nomor Telepon: {item.phoneNumber}</Text>
         <Text style={styles.status}>
           {item.status === 'success' ? 'Pembayaran Berhasil!' : item.status}
         </Text>
@@ -72,7 +71,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     alignItems: 'center', 
     marginBottom: 20,
-    paddingTop: 20, 
+    paddingTop: 30, 
   },
   backButton: {
     paddingRight: 10, 
