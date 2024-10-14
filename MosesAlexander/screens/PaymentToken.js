@@ -9,6 +9,7 @@ const PaymentToken = ({ navigation }) => {
 
   const { packageData, plnId } = transactionData; // Ambil data dari context
 
+  
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Konfirmasi Pembayaran Token Listrik</Text>
@@ -51,7 +52,6 @@ const PaymentToken = ({ navigation }) => {
       <TouchableOpacity 
         style={styles.confirmButton} 
         onPress={() => {
-          alert('Pembayaran Token Listrik Berhasil!'); 
           navigation.navigate('PinConfirmation'); // Arahkan ke halaman konfirmasi PIN
         }}
       >

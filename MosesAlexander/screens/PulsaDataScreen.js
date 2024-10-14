@@ -1,14 +1,34 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TransactionContext } from './TransactionContext';
+import { Feather } from '@expo/vector-icons';
 
 const PulsaDataScreen = () => {
   const { transactionData, updateTransactionData } = useContext(TransactionContext);
   const [errorMessage, setErrorMessage] = useState('Nomor pelanggan tidak valid.');
   const [activeTab, setActiveTab] = useState('Pulsa');
-
   const navigation = useNavigation();
+
+  useEffect(() => {
+
+    const parentNavigator = navigation.getParent();
+    if (parentNavigator) {
+      parentNavigator.setOptions({
+        tabBarStyle: { display: 'none' }
+      });
+    }
+
+    // Mengembalikan bottom navbar saat keluar dari layar PulsaDataScreen
+    return () => {
+      if (parentNavigator) {
+        parentNavigator.setOptions({
+          tabBarStyle: undefined
+        });
+      }
+    };
+  }, [navigation]);
+
 
   // Data pilihan pulsa
   const pulsaOptions = [
@@ -54,15 +74,31 @@ const PulsaDataScreen = () => {
     updateTransactionData('packageData', packageData); // Simpan packageData di context
     navigation.navigate('PaymentPulsa'); // Navigasi tanpa parameter
   };
-  
 
   const isValidPhoneNumber = errorMessage === "";
 
   return (
     <View style={styles.container}>
+      {/* Ikon panah kiri di posisi absolut */}
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Feather name="arrow-left" size={30} color="#000" />
+      </TouchableOpacity>
+
+      {/* Teks "Pulsa & Paket Data" di tengah layar */}
       <Text style={styles.header}>Pulsa & Paket Data</Text>
+
+      <Text style={styles.text1}> Nomor Ponsel </Text>
       
-      {/* Tab Selector */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={[styles.input, errorMessage && { borderColor: 'red' }]}
+          placeholder="Contoh: 082370323318"
+          value={transactionData.phoneNumber}
+          onChangeText={handlePhoneNumberChange}
+        />
+      </View>
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+
       <View style={styles.tabContainer}>
         <TouchableOpacity
           style={[styles.tabButton, activeTab === 'Pulsa' && styles.activeTab]}
@@ -77,17 +113,6 @@ const PulsaDataScreen = () => {
           <Text style={activeTab === 'Paket Data' ? styles.activeTabText : styles.tabText}>Paket Data</Text>
         </TouchableOpacity>
       </View>
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.input, errorMessage && { borderColor: 'red' }]}
-          placeholder="Contoh: 082370323318"
-          value={transactionData.phoneNumber}
-          onChangeText={handlePhoneNumberChange}
-        />
-      </View>
-
-      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
       {isValidPhoneNumber && (
         <FlatList
@@ -120,16 +145,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
+  backButton: {
+    position: 'absolute',
+    left: 10, // Jarak kiri dari layar
+    top: 50,  // Jarak dari atas
+    padding: 10,
+  },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'center', // Tetap berada di tengah layar
+    marginTop: 40, // Jarak dari atas untuk menyesuaikan dengan ikon
     marginBottom: 20,
+  },
+  text1: {
+    fontSize: 12,
+    color: '#555',
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
+    marginTop: 5,
   },
   input: {
     flex: 1,

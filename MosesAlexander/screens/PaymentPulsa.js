@@ -62,8 +62,7 @@ const PaymentPulsa = ({ navigation }) => {
       {/* Tombol Konfirmasi */}
       <TouchableOpacity 
         style={styles.confirmButton} 
-        onPress={() => {
-          alert('Pembayaran Berhasil!'); 
+        onPress={() => { 
           navigation.navigate('PinConfirmation'); // Arahkan ke halaman konfirmasi PIN
         }}
       >

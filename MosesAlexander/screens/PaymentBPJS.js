@@ -50,8 +50,7 @@ const PaymentBPJS = ({ navigation }) => {
       {/* Tombol Konfirmasi */}
       <TouchableOpacity 
         style={styles.confirmButton} 
-        onPress={() => {
-          alert('Pembayaran BPJS Berhasil!'); 
+        onPress={() => { 
           navigation.navigate('PinConfirmation'); // Arahkan ke halaman konfirmasi PIN
         }}
       >

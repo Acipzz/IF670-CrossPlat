@@ -15,13 +15,13 @@ const HomeStackScreen = () => {
   return (
     <Stack.Navigator initialRouteName="HomeScreen" options={headerShown= false} >
       <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="PulsaData" component={PulsaDataScreen} />
-      <Stack.Screen name="TokenListrik" component={TokenListrikScreen} />
-      <Stack.Screen name="BPJS" component={BPJSScreen} />
-      <Stack.Screen name="PaymentPulsa" component={PaymentPulsa} />
-      <Stack.Screen name="PaymentToken" component={PaymentToken} />
-      <Stack.Screen name="PaymentBPJS" component={PaymentBPJS} />
-      <Stack.Screen name="PinConfirmation" component={PinConfirmationScreen} />
+      <Stack.Screen name="PulsaData" component={PulsaDataScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="TokenListrik" component={TokenListrikScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="BPJS" component={BPJSScreen}  options={{ headerShown: false }} />
+      <Stack.Screen name="PaymentPulsa" component={PaymentPulsa}  options={{ headerShown: false }} />
+      <Stack.Screen name="PaymentToken" component={PaymentToken}  options={{ headerShown: false }} />
+      <Stack.Screen name="PaymentBPJS" component={PaymentBPJS} options={{ headerShown: false }}  />
+      <Stack.Screen name="PinConfirmation" component={PinConfirmationScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };

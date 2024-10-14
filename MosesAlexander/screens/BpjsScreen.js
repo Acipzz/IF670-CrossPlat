@@ -1,13 +1,29 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState,useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TransactionContext } from './TransactionContext';
+import { Feather } from '@expo/vector-icons';
 
 const BpjsScreen = () => {
   const { transactionData, updateTransactionData } = useContext(TransactionContext); // Gunakan context
   const [errorMessage, setErrorMessage] = useState('Nomor BPJS tidak valid.'); // Pesan error default
-
+  
   const navigation = useNavigation(); // Gunakan useNavigation untuk navigasi
+
+  useEffect(() => {
+    // Menyembunyikan bottom navbar ketika masuk ke layar PulsaDataScreen
+    navigation.getParent()?.setOptions({
+      tabBarStyle: { display: 'none' }
+    });
+
+    // Mengembalikan bottom navbar saat keluar dari layar PulsaDataScreen
+    return () => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: undefined
+      });
+    };
+  }, [navigation]);
+
 
   // Data pilihan nominal BPJS (kelipatan Rp50.000)
   const bpjsOptions = Array.from({ length: 12 }, (_, i) => ({
@@ -41,6 +57,9 @@ const BpjsScreen = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Feather name="arrow-left" size={30} color="#000" />
+      </TouchableOpacity>
       <Text style={styles.header}>Pembayaran BPJS</Text>
 
       <View style={styles.inputContainer}>
@@ -86,11 +105,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
+  },backButton: {
+    position: 'absolute',
+    left: 10, // Jarak kiri dari layar
+    top: 50,  // Jarak dari atas
+    padding: 10,
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'center', // Tetap berada di tengah layar
+    marginTop: 40, // Jarak dari atas untuk menyesuaikan dengan ikon
     marginBottom: 20,
   },
   inputContainer: {

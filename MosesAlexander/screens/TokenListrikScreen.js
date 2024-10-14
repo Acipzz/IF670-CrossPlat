@@ -1,13 +1,28 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TransactionContext } from './TransactionContext';
+import { Feather } from '@expo/vector-icons';
 
 const TokenListrikScreen = () => {
   const { transactionData, updateTransactionData } = useContext(TransactionContext);
   const [errorMessage, setErrorMessage] = useState('ID pelanggan tidak valid.');
-
   const navigation = useNavigation();
+
+  useEffect(() => {
+    // Menyembunyikan bottom navbar ketika masuk ke layar PulsaDataScreen
+    navigation.getParent()?.setOptions({
+      tabBarStyle: { display: 'none' }
+    });
+
+    // Mengembalikan bottom navbar saat keluar dari layar PulsaDataScreen
+    return () => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: undefined
+      });
+    };
+  }, [navigation]);
+
 
   const tokenOptions = [
     { value: '13,2 kWh', price: 20000 },
@@ -43,6 +58,10 @@ const TokenListrikScreen = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Feather name="arrow-left" size={30} color="#000" />
+      </TouchableOpacity>
+
       <Text style={styles.header}>Token Listrik</Text>
 
       <View style={styles.inputContainer}>
@@ -89,10 +108,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
+  backButton: {
+    position: 'absolute',
+    left: 10, // Jarak kiri dari layar
+    top: 50,  // Jarak dari atas
+    padding: 10,
+  },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'center', // Tetap berada di tengah layar
+    marginTop: 40, // Jarak dari atas untuk menyesuaikan dengan ikon
     marginBottom: 20,
   },
   inputContainer: {
