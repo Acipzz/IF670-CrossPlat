@@ -111,17 +111,17 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   headerContainer: {
-    flexDirection: 'row', // Mengatur back button dan header dalam satu baris
-    alignItems: 'center', // Memastikan mereka sejajar secara vertikal
+    flexDirection: 'row', 
+    alignItems: 'center', 
     marginBottom: 20,
-    paddingTop: 30,
+    paddingRight: 30,
   },
 
   header: {
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    flex: 1, // Membuat teks berada di tengah dengan fleksibilitas
+    flex: 1, 
   },
   inputContainer: {
     marginBottom: 20,

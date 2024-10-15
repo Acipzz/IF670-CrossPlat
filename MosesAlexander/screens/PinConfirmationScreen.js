@@ -9,7 +9,7 @@ const PinConfirmationScreen = () => {
   const maxPinLength = 6;
   const correctPin = '080604';
   const [isError, setIsError] = useState(false);
-  const [attempt, setAttempt] = useState(2);
+  const [attempt, setAttempt] = useState(3);
   const inputRef = useRef(null);
   const navigation = useNavigation();
 

@@ -1,20 +1,25 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { TransactionContext } from './TransactionContext';
+import { Feather, Foundation, MaterialIcons } from '@expo/vector-icons';
 
 const HomeScreen = ({ navigation }) => {
-  const { updateTransactionData } = useContext(TransactionContext); // Ambil updateTransactionData dari context
+  const { updateTransactionData } = useContext(TransactionContext);
 
-  // Di tempat pemilihan paket, misalnya di HomeScreen.js
-const handleOptionSelect = (option) => {
-  // Setel selectedPackage berdasarkan pilihan pengguna
-  updateTransactionData('selectedPackage', { type: option });
-};
-
+  const handleOptionSelect = (option) => {
+    updateTransactionData('selectedPackage', { type: option });
+  };
 
   return (
     <View style={styles.container}>
-      {/* Profile Section */}
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../assets/union.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+        <Text style={styles.logoText}>All-U-Need</Text>
+      </View>
       <View style={styles.profile}>
         <View style={styles.nameProf}>
           <Text style={styles.titleProf}>Moses Alexander</Text>
@@ -23,48 +28,61 @@ const handleOptionSelect = (option) => {
         <View style={styles.divider} />
         <View style={styles.headerButtons}>
           <TouchableOpacity style={styles.headerButton}>
+            <Feather name="arrow-up-circle" size={30} color="#555" />
             <Text style={styles.headerButtonText}>Transfer</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.headerButton}>
+            <Feather name="arrow-down-circle" size={30} color="#555" />
             <Text style={styles.headerButtonText}>Tarik Tunai</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.headerButton}>
+            <Foundation name="indent-more" size={30} color="#555" />
             <Text style={styles.headerButtonText}>More</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Transaction Selection */}
       <Text style={styles.title}>Pilih Transaksi</Text>
       <View style={styles.pembayaran}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            handleOptionSelect('pulsa'); // Setel jenis paket
-            navigation.navigate('PulsaData');  // Navigasi ke Pulsa
+            handleOptionSelect('pulsa');
+            navigation.navigate('PulsaData');
           }}
         >
-          <Text style={styles.buttonText}>Pulsa/Data</Text>
+          <MaterialIcons name="smartphone" size={30} color="#fff" />  
+          <Text style={styles.buttonText}>Pulsa{'\n'}/Data</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            handleOptionSelect('listrik'); // Setel jenis paket
+            handleOptionSelect('listrik');
             navigation.navigate('TokenListrik');
           }}
         >
-          <Text style={styles.buttonText}>Token Listrik</Text>
+          <MaterialIcons name="electric-bolt" size={30} color="#fff" />
+          <Text style={styles.buttonText}>Token {'\n'} Listrik</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            handleOptionSelect('bpjs'); // Setel jenis paket
+            handleOptionSelect('bpjs');
             navigation.navigate('BPJS');
           }}
         >
+          <MaterialIcons name="health-and-safety" size={30} color="#fff" />
           <Text style={styles.buttonText}>BPJS</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={styles.Promosi}>
+        <Image
+          source={require('../assets/promosi.png')}
+          style={styles.promoImage}
+          resizeMode="contain"
+        />
+        </View>
     </View>
   );
 };
@@ -74,13 +92,31 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#fff',
-    paddingTop: 50,
+    paddingTop: 60,
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 10,
+    left: 20,
+  },
+  logo: {
+    width: 60,
+    height: 60,
+    marginBottom: 8,
+  },
+  logoText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
   },
   profile: {
     width: '90%',
     padding: 20,
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
+    marginTop: 20,
     marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -112,11 +148,11 @@ const styles = StyleSheet.create({
   },
   headerButton: {
     alignItems: 'center',
-    padding: 10,
-    backgroundColor: '#f0f0f0',
+    paddingVertical: 10,
+    flex: 1,
     marginHorizontal: 5,
     borderRadius: 5,
-    flex: 1,
+    backgroundColor: '#f0f0f0',
     borderWidth: 1,
     borderColor: '#dcdcdc',
     shadowColor: '#000',
@@ -126,7 +162,8 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   headerButtonText: {
-    fontSize: 16,
+    marginTop: 8, 
+    fontSize: 12,
     color: '#555',
   },
   title: {
@@ -140,16 +177,38 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   button: {
-    padding: 15,
+    alignItems: 'center',
+    paddingVertical: 15,
+    flex: 1,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#dcdcdc',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
+    elevation: 2,
     backgroundColor: '#007bff',
     alignItems: 'center',
     borderRadius: 10,
-    flex: 1,
-    marginHorizontal: 5,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 14,
+    marginTop: 8,
+  },
+  Promosi: {
+    width: '90%',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  promoImage: {
+    width: '100%',
+    height: 200,
   },
 });
 
