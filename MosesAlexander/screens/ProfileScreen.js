@@ -4,12 +4,13 @@ import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const ProfileScreen = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false); // Dummy state
   const navigation = useNavigation();
-  const toggleDarkMode = () => setIsDarkMode(previousState => !previousState);
+
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState); // Toggle handler
 
   return (
-    <View style={[styles.container, isDarkMode && styles.darkContainer]}>
+    <View style={[styles.container]}>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Feather name="arrow-left" size={30} color="#000" />
@@ -39,8 +40,8 @@ const ProfileScreen = () => {
         <View style={styles.optionRow}>
           <Text style={styles.optionText}>Dark Mode</Text>
           <Switch
-            value={isDarkMode}
-            onValueChange={toggleDarkMode}
+            value={isEnabled} // Dummy state value
+            onValueChange={toggleSwitch} // Dummy toggle function
           />
         </View>
       </View>
