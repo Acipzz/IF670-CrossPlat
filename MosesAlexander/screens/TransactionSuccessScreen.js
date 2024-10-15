@@ -5,11 +5,17 @@ import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const TransactionSuccessScreen = () => {
-  const { transactionData } = useContext(TransactionContext);
+  const { transactionData, updateTransactionData } = useContext(TransactionContext);
   const navigation = useNavigation();
 
-  // Menggunakan packageData untuk mendapatkan detail transaksi
-  const { packageData } = transactionData;
+  // Pastikan packageData memiliki nilai default
+  const packageData = transactionData.packageData || { price: 0, value: 'N/A' };
+
+  const handleClose = () => {
+    updateTransactionData('pin', ''); // Reset PIN saat transaksi selesai
+    updateTransactionData('packageData', {}); // Reset data transaksi
+    navigation.navigate('HomeScreen'); // Kembali ke Home
+  };
 
   return (
     <View style={styles.container}>
@@ -20,16 +26,20 @@ const TransactionSuccessScreen = () => {
       </View>
 
       <Text style={styles.paymentText}>Pembayaran sebesar</Text>
-      <Text style={styles.amountText}>Rp {packageData?.price.toLocaleString()}</Text>
-      <Text style={styles.dateText}>Tanggal Pembelian: {new Date().toLocaleDateString()} {new Date().toLocaleTimeString()}</Text>
+      <Text style={styles.amountText}>
+        Rp {packageData.price.toLocaleString('id-ID')}
+      </Text>
+      <Text style={styles.dateText}>
+        Tanggal Pembelian: {new Date().toLocaleDateString()} {new Date().toLocaleTimeString()}
+      </Text>
 
       <Text style={styles.balanceText}>
-        Kamu telah membeli paket sebesar {packageData?.value}.
+        Kamu telah membeli paket sebesar {packageData.value}.
       </Text>
 
       <TouchableOpacity 
         style={styles.closeButton} 
-        onPress={() => navigation.navigate('HomeScreen')}
+        onPress={handleClose} // Gunakan fungsi baru
       >
         <Text style={styles.closeButtonText}>Tutup</Text>
       </TouchableOpacity>
@@ -40,6 +50,8 @@ const TransactionSuccessScreen = () => {
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {

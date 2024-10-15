@@ -143,19 +143,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-    paddingTop: 20,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
     paddingTop: 30,
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    flex: 1,
   },
   header: {
     fontSize: 20,

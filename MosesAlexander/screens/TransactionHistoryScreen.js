@@ -11,30 +11,31 @@ const TransactionHistoryScreen = ({ navigation }) => {
     transaction.traceNo.includes(searchQuery)
   );
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity 
-      style={styles.transactionItem} 
-      onPress={() => navigation.navigate('Detail', { transaction: item })}
-    >
-      <View style={styles.transactionDetails}>
-        <Text style={styles.traceNo}>Trace No. {item.traceNo}</Text>
-        <Text style={styles.transactionType}>Paket. {item.type}</Text>
-        <Text style={styles.status}>
-          {item.status === 'success' ? 'Pembayaran Berhasil!' : item.status}
-        </Text>
-      </View>
-      <View style={styles.transactionMeta}>
-        <Text style={styles.date}>{item.date}</Text>
-        <Text style={styles.amount}>{item.amount}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+    const renderItem = ({ item }) => (
+      <TouchableOpacity 
+        style={styles.transactionItem} 
+        onPress={() => navigation.navigate('Detail', { transaction: item })}
+      >
+        <View style={styles.transactionDetails}>
+          <Text style={styles.traceNo}>Trace No. {item.traceNo}</Text>
+          <Text style={styles.transactionType}>Paket. {item.type}</Text>
+          <Text style={[styles.status, { color: item.status === 'success' ? 'green' : 'red' }]}>
+            {item.status === 'success' ? 'Transaksi Berhasil!' : 'Transaksi Gagal'}
+          </Text>
+        </View>
+        <View style={styles.transactionMeta}>
+          <Text style={styles.date}>{item.date}</Text>
+          <Text style={styles.amount}>{item.amount}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+    
   
 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.backButton}>
           <Feather name="arrow-left" size={32} color="#000" />
         </TouchableOpacity>
 

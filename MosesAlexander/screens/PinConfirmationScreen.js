@@ -9,14 +9,16 @@ const PinConfirmationScreen = () => {
   const maxPinLength = 6;
   const correctPin = '080604';
   const [isError, setIsError] = useState(false);
+  const [attempt, setAttempt] = useState(2);
   const inputRef = useRef(null);
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (transactionData.pin.length === maxPinLength) {
+    if (transactionData.pin && transactionData.pin.length === maxPinLength) {
       handleConfirm(transactionData.pin);
     }
   }, [transactionData.pin]);
+  
 
   
   const generateRandomNumber = (length) => {
@@ -27,54 +29,85 @@ const PinConfirmationScreen = () => {
     return result;
   };
   
- const handleConfirm = (enteredPin) => {
-  if (enteredPin === correctPin) {
-    const selectedIdentifier = transactionData.selectedPackage?.type; // Tipe paket yang dipilih
-
-    let transactionIdentifier;
-    if (selectedIdentifier === 'pulsa') {
-      transactionIdentifier = transactionData.phoneNumber; // Menggunakan nomor telepon untuk pulsa
-    } else if (selectedIdentifier === 'listrik') {
-      transactionIdentifier = transactionData.plnId; // Menggunakan PLN ID untuk listrik
-    } else if (selectedIdentifier === 'bpjs') {
-      transactionIdentifier = transactionData.bpjsId; // Menggunakan BPJS ID untuk BPJS
-    } else {
-      console.log("Jenis transaksi tidak dikenali: ", selectedIdentifier);
-    }
-
-    console.log("Transaction Identifier: ", transactionIdentifier); // Log untuk memastikan identifier diatur
-
+  const handleConfirm = (enteredPin) => {
+    if (enteredPin === correctPin) {
+      const selectedIdentifier = transactionData.selectedPackage?.type || 'Tidak Diketahui';
+      const packageData = transactionData.packageData || { price: 0, value: 'N/A' };
+  
+      let transactionIdentifier;
+      if (selectedIdentifier === 'pulsa') {
+        transactionIdentifier = transactionData.phoneNumber || 'N/A';
+      } else if (selectedIdentifier === 'listrik') {
+        transactionIdentifier = transactionData.plnId || 'N/A';
+      } else if (selectedIdentifier === 'bpjs') {
+        transactionIdentifier = transactionData.bpjsId || 'N/A';
+      } else {
+        console.log('Jenis transaksi tidak dikenali:', selectedIdentifier);
+      }
+  
       const newTransaction = {
         id: Math.random().toString(),
         traceNo: Date.now().toString().slice(-6),
-        type: transactionData.packageData?.value,
+        type: packageData.value,
         date: new Date().toLocaleString(),
-        amount: `Rp ${transactionData.packageData?.price.toLocaleString()}`,
-        status: 'Berhasil',
-        transactionIdentifier, // Menyimpan identifier yang sesuai
-        transactionType: 'SALE', // Menggunakan 'SALE' sebagai tipe transaksi
-        cardType: 'Kartu UNIONPAY CREDIT', // Menggunakan jenis kartu yang sesuai
-        cardNumber: `************${generateRandomNumber(4)}`, // Menghasilkan nomor kartu
-        batch: generateRandomNumber(6), // Menghasilkan batch
-        referenceNo: generateRandomNumber(6), // Menghasilkan reference no
-        approvalCode: generateRandomNumber(6), // Menghasilkan approval code
+        amount: `Rp ${packageData.price.toLocaleString()}`,
+        status: 'success',
+        transactionIdentifier,
+        transactionType: 'SALE',
+        cardType: 'Kartu UNIONPAY CREDIT',
+        cardNumber: `************${generateRandomNumber(4)}`,
+        batch: generateRandomNumber(6),
+        referenceNo: generateRandomNumber(6),
+        approvalCode: generateRandomNumber(6),
       };
   
-      addTransactionToHistory(newTransaction); // Tambahkan transaksi ke riwayat
-  
+      addTransactionToHistory(newTransaction);
       Alert.alert('Pembayaran berhasil!', 'Transaksi Anda telah berhasil diproses.');
+  
+      // Reset semua data transaksi
+      resetTransactionData();
+  
       updateTransactionData('transactionStatus', 'success');
       Keyboard.dismiss();
       navigation.navigate('TransactionSuccess');
     } else {
-      setIsError(true); // Tampilkan error
-      setTimeout(() => {
-        updateTransactionData('pin', ''); // Reset PIN
-        setIsError(false); // Reset status error
-        inputRef.current?.focus(); // Fokus ulang ke input
-      }, 1000); 
+      if (attempt > 1) {
+        setAttempt(attempt - 1);
+        setIsError(true);
+        setTimeout(() => {
+          updateTransactionData('pin', '');
+          setIsError(false);
+          inputRef.current?.focus();
+        }, 1000);
+      } else {
+        const failedTransaction = {
+          id: Math.random().toString(),
+          traceNo: Date.now().toString().slice(-6),
+          type: transactionData.packageData?.value || 'N/A',
+          date: new Date().toLocaleString(),
+          amount: `Rp ${transactionData.packageData?.price?.toLocaleString() || '0'}`,
+          status: 'failed',
+        };
+  
+        addTransactionToHistory(failedTransaction);
+        Alert.alert('PIN Salah!', 'Anda telah melebihi batas percobaan. Transaksi gagal.');
+  
+        // Reset semua data transaksi
+        resetTransactionData();
+  
+        Keyboard.dismiss();
+        navigation.navigate('Riwayat');
+      }
     }
   };
+  
+
+const resetTransactionData = () => {
+  updateTransactionData('pin', '');
+  updateTransactionData('phoneNumber', '');
+  updateTransactionData('plnId', '');
+  updateTransactionData('bpjsId', '');
+};
   
   
   
