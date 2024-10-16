@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-    },
+  },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
