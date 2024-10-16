@@ -27,7 +27,7 @@ const TransactionSuccessScreen = () => {
 
       <Text style={styles.paymentText}>Pembayaran sebesar</Text>
       <Text style={styles.amountText}>
-        Rp {packageData.price.toLocaleString('id-ID')}
+        Rp {(packageData.price ?? 0).toLocaleString('id-ID')}
       </Text>
       <Text style={styles.dateText}>
         Tanggal Pembelian: {new Date().toLocaleDateString()} {new Date().toLocaleTimeString()}
