@@ -1,7 +1,15 @@
 import React, { useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { TransactionContext } from './TransactionContext';
 import { Feather } from '@expo/vector-icons';
+
+const logos = {
+  Telkomsel: require('../assets/Telkomsel.png'),
+  Indosat: require('../assets/indosat.png'),
+  XL: require('../assets/XL.png'),
+  Tri: require('../assets/Tri.png'),
+  Smartfren: require('../assets/Smartfren.png'),
+};
 
 const PaymentPulsa = ({ navigation }) => {
   const { transactionData } = useContext(TransactionContext); // Ambil data dari context
@@ -21,6 +29,9 @@ const PaymentPulsa = ({ navigation }) => {
     );
   }
 
+  const operator = getOperatorLabel(phoneNumber);
+  const logo = logos[operator];
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -31,6 +42,7 @@ const PaymentPulsa = ({ navigation }) => {
       </View>
 
       <View style={styles.packageInfo}>
+        <Image source={logo} style={{ width: 100, height: 100 }} resizeMode="contain" />
         <Text style={styles.packageLabel}>Operator: {getOperatorLabel(phoneNumber)}</Text> 
         <Text style={styles.phoneNumber}>Nomor Telepon: {phoneNumber}</Text>
         <Text style={styles.packagePrice}>Paket: {packageData.value}</Text>
@@ -44,8 +56,11 @@ const PaymentPulsa = ({ navigation }) => {
           <Text>Saldo saya</Text>
           <Text>Rp 900.000</Text>
         </View>
-        <Text>Total Pembayaran: Rp {packageData.price.toLocaleString()}</Text>
-      </View>
+        <View style={styles.totalRow}>
+          <Text>Total Pembayaran</Text>
+          <Text>Rp {packageData.price.toLocaleString()}</Text>
+        </View>
+        </View>
 
       {/* Detail Pembayaran */}
       <View style={styles.paymentDetails}>
