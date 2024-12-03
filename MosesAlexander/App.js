@@ -1,109 +1,163 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Alert,
-  Platform,
-  PermissionsAndroid,
-} from "react-native";
-import Geolocation from "@react-native-community/geolocation";
+import { StyleSheet, Text, View, Button, Alert, Image } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from "expo-media-library";
+import * as Location from "expo-location";
+import { savePhotoUriAndLocationToFirestore } from "./firestoreFunctions";
+import { StatusBar } from "expo-status-bar";
 
-export default function App() {
-  const [coords, setCoords] = useState(null);
+const App = () => {
+  const [uri, setUri] = useState("");
+  const [location, setLocation] = useState(null);
 
-  const getLocation = async () => {
-    console.log("Checking permissions...");
-    const hasPermission = await hasLocationPermission();
-  
-    if (!hasPermission) {
-      console.log("Permission not granted!");
-      Alert.alert("Error", "Location permission not granted");
+  const handleCameraLaunch = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert(
+        "Permission required",
+        "You need to enable permission to access the camera."
+      );
       return;
     }
-  
-    console.log("Fetching location...");
-    Geolocation.getCurrentPosition(
-      (position) => {
-        console.log("Position fetched: ", position);
-        setCoords(position.coords);
-      },
-      (error) => {
-        console.error("Error fetching position: ", error.message);
-        Alert.alert("Error", error.message);
-      },
-      {
-        accuracy: {
-          android: "high",
-        },
-        enableHighAccuracy: true,
-        timeout: 20000,
-        maximumAge: 0,
-      }
-    );
+
+    const response = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!response.canceled && response.assets && response.assets.length > 0) {
+      const imageUri = response.assets[0].uri;
+      setUri(imageUri);
+      console.log("Image URI:", imageUri);
+    } else {
+      Alert.alert("Cancelled", "No photo was taken.");
+    }
   };
-  
 
-  const hasLocationPermission = async () => {
-    if (Platform.OS === "android" && Platform.Version < 23) {
-      return true;
+  const openImagePicker = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert(
+        "Permission required",
+        "You need to enable permission to access the photo library."
+      );
+      return;
     }
 
-    const hasPermission = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-    );
+    const response = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
 
-    if (hasPermission) {
-      return true;
+    if (!response.canceled && response.assets && response.assets.length > 0) {
+      const imageUri = response.assets[0].uri;
+      setUri(imageUri);
+      console.log("Image URI:", imageUri);
+    } else {
+      Alert.alert("Cancelled", "No image was selected.");
+    }
+  };
+
+  const saveToLocalAndFirestore = async () => {
+    if (!uri) {
+      Alert.alert(
+        "No image selected",
+        "Please capture or select an image first."
+      );
+      return;
     }
 
-    const status = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-    );
-
-    if (status === PermissionsAndroid.RESULTS.GRANTED) {
-      return true;
+    const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
+    if (!mediaLibraryPermission.granted) {
+      Alert.alert(
+        "Permission required",
+        "You need to enable permission to save images to the gallery."
+      );
+      return;
     }
 
-    if (status === PermissionsAndroid.RESULTS.DENIED) {
-      console.log("Location permission denied by user.");
-    } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-      console.log("Location permission denied by user.");
-    }
+    try {
+      const asset = await MediaLibrary.createAssetAsync(uri);
+      console.log("Image saved to Camera Roll:", asset.uri);
 
-    return false;
+      const locationPermission =
+        await Location.requestForegroundPermissionsAsync();
+      if (!locationPermission.granted) {
+        Alert.alert("Permission Denied", "Location access is required.");
+        return;
+      }
+
+      const currentLocation = await Location.getCurrentPositionAsync({});
+      const locationData = {
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+      };
+      setLocation(locationData);
+
+      console.log("Location Data:", locationData);
+
+      await savePhotoUriAndLocationToFirestore(asset.uri, locationData);
+      Alert.alert(
+        "Success",
+        "Image and location saved to Firestore and device."
+      );
+    } catch (error) {
+      console.error("Error saving data:", error);
+      Alert.alert("Error", "Failed to save data.");
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Moses Alexander - 00000069818</Text>
-      <Button title="GET GEO LOCATION" onPress={getLocation} />
-      {coords && (
-        <View style={styles.locationContainer}>
-          <Text>Longitude: {coords.longitude}</Text>
-          <Text>Latitude: {coords.latitude}</Text>
-        </View>
+      <Text>Edwin Fedora Lolo - 00000069568</Text>
+      <Button
+        title="Open Camera"
+        onPress={handleCameraLaunch}
+        color="#1E90FF"
+      />
+      <Button title="Open Gallery" onPress={openImagePicker} color="#1E90FF" />
+
+      {uri ? (
+        <>
+          <Image source={{ uri }} style={styles.image} />
+          <Button
+            title="Save to Local and Firestore"
+            onPress={saveToLocalAndFirestore}
+            color="#1E90FF"
+          />
+        </>
+      ) : (
+        <Text>No image selected</Text>
       )}
+
+      {location && (
+        <Text>
+          Location: {location.latitude}, {location.longitude}
+        </Text>
+      )}
+
+      <StatusBar style="auto" />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
     padding: 20,
+    backgroundColor: "#fff",
   },
-  text: {
-    marginBottom: 20,
-    fontSize: 16,
-    textAlign: "center",
-  },
-  locationContainer: {
+  image: {
+    width: 200,
+    height: 200,
     marginTop: 20,
-    alignItems: "center",
+    borderRadius: 10,
   },
 });
+
+export default App;
