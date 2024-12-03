@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "463379299449",
+    "project_id": "crossplat-36aad",
+    "storage_bucket": "crossplat-36aad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463379299449:android:96e7f22ac8c96d4c66e8a8",
+        "android_client_info": {
+          "package_name": "com.anonymous.MosesAlexander"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnCqTvry5r_cISl8vEpHBShl_5ybhzimo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

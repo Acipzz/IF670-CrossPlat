@@ -112,7 +112,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Edwin Fedora Lolo - 00000069568</Text>
+      <Text>Moses Alexander - 00000069818</Text>
       <Button
         title="Open Camera"
         onPress={handleCameraLaunch}
